@@ -2,27 +2,140 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Rats" do
   
-  it "initializes the class"
+  it "initializes the class" do
+    land = LegalLandDescription.new
+    land.is_a?(Rats::LegalLandDescription).should be_true
+  end
+  
+  describe "attributes" do
+    
+    before(:each) do
+      @land = LegalLandDescription.new
+    end
+    
+    describe "writing and reading" do
+      
+      it "writes quarter" do
+        @land.quarter = "NE"
+        @land.quarter.should == "NE"
+      end
+      
+      it "writes section" do
+        @land.section = 1
+        @land.section.should == 1
+      end
+      
+      it "writes township" do
+        @land.township = 1
+        @land.township.should == 1
+      end
+      
+      it "writes range" do
+        @land.range = 1
+        @land.range.should == 1
+      end
+      
+      it "writes meridian" do
+        @land.meridian = 1
+        @land.meridian.should == "W1"
+      end
+      
+    end
+    
+  end
   
   describe "parsing locations" do
     
-    it "understands NE 1-1-1 W4"
+    it "understands NE 1-2-3 W4" do
+      land = LegalLandDescription.new("NE 1-2-3 W4")
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "understands NE 1-1-1-4"
+    it "understands NE 1-1-1-4" do
+      land = LegalLandDescription.new("NE 1-2-3-4")
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "understands NE 1 1 1 4"
+    it "understands NE 1 2 3 4" do
+      land = LegalLandDescription.new("NE 1 2 3 4")
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "understands 40100101NE"
+    it "understands 40300201NE" do
+      land = LegalLandDescription.new("40300201NE")
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "understands NE01001014"
+    # NOT SURE THIS IS USEFUL
+    # it "understands NE01002034" do
+    #   land = LegalLandDescription.new("NE01002034")
+    #   land.quarter.should == "NE"
+    #   land.section.should == 1
+    #   land.township.should == 2
+    #   land.range.should == 3
+    #   land.meridian.should == "W4"
+    # end
     
-    it "understands 1-1-1 W4"
+    it "understands 1-2-3 W4" do
+      land = LegalLandDescription.new("1-2-3 W4")
+      land.quarter.should be_nil
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "understands 1-1 W4"
+    it "understands 2-3 W4" do
+      land = LegalLandDescription.new("2-3 W4")
+      land.quarter.should be_nil
+      land.section.should be_nil
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "doesn't like 1 W4"
+    it "understands 3 W4" do
+      land = LegalLandDescription.new("3 W4")
+      land.quarter.should be_nil
+      land.section.should be_nil
+      land.township.should be_nil
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
-    it "doesn't like W4"
+    it "understands W4" do
+      land = LegalLandDescription.new("W4")
+      land.quarter.should be_nil
+      land.section.should be_nil
+      land.township.should be_nil
+      land.range.should be_nil
+      land.meridian.should == "W4"
+    end
+    
+    it "understands individual values" do
+      land = LegalLandDescription.new("NE", 1, 2, 3, 4)
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == "W4"
+    end
     
   end
   
@@ -196,23 +309,13 @@ describe "Rats" do
     
   end
   
-  describe "attributes" do
-    
-    it "returns quarter"
-    
-    it "returns section"
-    
-    it "returns township"
-    
-    it "returns range"
-    
-    it "returns meridian"
-    
-  end
-  
   describe "methods" do
     
     it "copies the class"
+    
+    it "knows when it is valid"
+    
+    it "parses using location as well as new"
     
   end
   
