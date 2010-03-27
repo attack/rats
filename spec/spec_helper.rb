@@ -1,8 +1,8 @@
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'rats'
+require 'rubygems'
 require 'spec'
-require 'spec/autorun'
+
+$:.unshift(File.dirname(__FILE__) + '/../lib')
+require 'rats'
 
 Spec::Runner.configure do |config|
   
