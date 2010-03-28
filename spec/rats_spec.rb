@@ -3,14 +3,14 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Rats" do
   
   it "initializes the class" do
-    land = LegalLandDescription.new
-    land.is_a?(Rats::LegalLandDescription).should be_true
+    land = Rats.new
+    land.is_a?(Rats::Base).should be_true
   end
   
   describe "attributes" do
     
     before(:each) do
-      @land = LegalLandDescription.new
+      @land = Rats.new
     end
     
     describe "writing and reading" do
@@ -47,7 +47,7 @@ describe "Rats" do
   describe "parsing locations" do
     
     it "understands NE 1-2-3 W4" do
-      land = LegalLandDescription.new("NE 1-2-3 W4")
+      land = Rats.new("NE 1-2-3 W4")
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
@@ -56,7 +56,7 @@ describe "Rats" do
     end
     
     it "understands NE 1-1-1-4" do
-      land = LegalLandDescription.new("NE 1-2-3-4")
+      land = Rats.new("NE 1-2-3-4")
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
@@ -65,7 +65,7 @@ describe "Rats" do
     end
     
     it "understands NE 1 2 3 4" do
-      land = LegalLandDescription.new("NE 1 2 3 4")
+      land = Rats.new("NE 1 2 3 4")
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
@@ -74,7 +74,7 @@ describe "Rats" do
     end
     
     it "understands 40300201NE" do
-      land = LegalLandDescription.new("40300201NE")
+      land = Rats.new("40300201NE")
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
@@ -84,7 +84,7 @@ describe "Rats" do
     
     # NOT SURE THIS IS USEFUL
     # it "understands NE01002034" do
-    #   land = LegalLandDescription.new("NE01002034")
+    #   land = Rats.new("NE01002034")
     #   land.quarter.should == "NE"
     #   land.section.should == 1
     #   land.township.should == 2
@@ -93,7 +93,7 @@ describe "Rats" do
     # end
     
     it "understands 1-2-3 W4" do
-      land = LegalLandDescription.new("1-2-3 W4")
+      land = Rats.new("1-2-3 W4")
       land.quarter.should be_nil
       land.section.should == 1
       land.township.should == 2
@@ -102,7 +102,7 @@ describe "Rats" do
     end
     
     it "understands 2-3 W4" do
-      land = LegalLandDescription.new("2-3 W4")
+      land = Rats.new("2-3 W4")
       land.quarter.should be_nil
       land.section.should be_nil
       land.township.should == 2
@@ -111,7 +111,7 @@ describe "Rats" do
     end
     
     it "understands 3 W4" do
-      land = LegalLandDescription.new("3 W4")
+      land = Rats.new("3 W4")
       land.quarter.should be_nil
       land.section.should be_nil
       land.township.should be_nil
@@ -120,7 +120,7 @@ describe "Rats" do
     end
     
     it "understands W4" do
-      land = LegalLandDescription.new("W4")
+      land = Rats.new("W4")
       land.quarter.should be_nil
       land.section.should be_nil
       land.township.should be_nil
@@ -129,12 +129,36 @@ describe "Rats" do
     end
     
     it "understands individual values" do
-      land = LegalLandDescription.new("NE", 1, 2, 3, 4)
+      land = Rats.new("NE", 1, 2, 3, 4)
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == "W4"
+    end
+    
+    describe "alternate method" do
+    
+      it "using location and a string" do
+        land = Rats.new
+        land.location = "NE 1-2-3 W4"
+        land.quarter.should == "NE"
+        land.section.should == 1
+        land.township.should == 2
+        land.range.should == 3
+        land.meridian.should == "W4"
+      end
+
+      it "using location and individual values" do
+        land = Rats.new
+        land.location = ["NE", 1, 2, 3, 4]
+        land.quarter.should == "NE"
+        land.section.should == 1
+        land.township.should == 2
+        land.range.should == 3
+        land.meridian.should == "W4"
+      end
+      
     end
     
   end
@@ -279,21 +303,39 @@ describe "Rats" do
     
     describe ":long" do
     
-      it "returns NE 1-1-1 W4"
+      it "returns NE 1-2-3 W4" do
+        land = Rats.new("NE 1-2-3 W4")
+        land.location.should == "NE 1-2-3 W4"
+      end
     
-      it "returns 1-1-1 W4"
+      it "returns 1-2-3 W4" do
+        land = Rats.new("1-2-3 W4")
+        land.location.should == "1-2-3 W4"
+      end
     
-      it "returns 1-1 W4"
+      it "returns 2-3 W4" do
+        land = Rats.new("2-3 W4")
+        land.location.should == "2-3 W4"
+      end
       
     end
     
     describe ":short" do
     
-      it "returns NE01001014"
+      it "returns NE01002034" do
+        land = Rats.new("NE 1-2-3 W4")
+        land.location(:short).should == "NE01002034"
+      end
       
-      it "returns 01001014"
+      it "returns 01001014" do
+        land = Rats.new("1-2-3 W4")
+        land.location(:short).should == "01002034"
+      end
 
-      it "returns 001014"
+      it "returns 001014" do
+        land = Rats.new("2-3 W4")
+        land.location(:short).should == "002034"
+      end
 
     end
     
@@ -301,22 +343,50 @@ describe "Rats" do
   
   describe "scope" do
     
-    it "knows quarter"
+    it "knows quarter" do
+      land = Rats.new("NE 1-2-3 W4")
+      land.scope.should == :quarter
+    end
     
-    it "knows section"
+    it "knows section" do
+      land = Rats.new("1-2-3 W4")
+      land.scope.should == :section
+    end
     
-    it "knows township"
+    it "knows township" do
+      land = Rats.new("2-3 W4")
+      land.scope.should == :township
+    end
+    
+    it "anything else is unknown" do
+      land = Rats.new("3 W4")
+      land.scope.should == :unknown
+    end
     
   end
   
   describe "methods" do
     
+    describe "validity" do
+      
+      it "knows when it is valid" do
+        land = Rats.new("NE 1-2-3 W4")
+        land.valid?.should be_true
+      end
+      
+      it "knows when it isn't valid"do
+        land = Rats.new("3 W4")
+        land.valid?.should be_false
+      end
+      
+    end
+    
+    it "responds_to :to_s"
+    
+    it "responds_to :to_a"
+        
     it "copies the class"
-    
-    it "knows when it is valid"
-    
-    it "parses using location as well as new"
-    
+            
   end
   
 end
