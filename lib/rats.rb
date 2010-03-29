@@ -2,6 +2,7 @@ $:.unshift(File.dirname(__FILE__))
 
 require 'rats/base'
 require 'rats/data'
+require 'rats/boundaries'
 
 module Rats
   

@@ -7,4 +7,18 @@ describe Rats::Quarter do
     data.is_a?(Rats::Quarter).should be_true
   end
   
+  describe "boundaries" do
+    
+    it "allows valid data" do
+      data = Rats::Quarter.new("NE")
+      data.valid?.should be_true
+    end
+    
+    it "doesn't allow bad data" do
+      data = Rats::Quarter.new
+      lambda { data.value = "bad" }.should raise_error(ArgumentError)
+    end
+    
+  end
+  
 end

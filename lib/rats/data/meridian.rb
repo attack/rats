@@ -1,10 +1,14 @@
 module Rats
   class Meridian < Data
     
-      def to_p(width=1)
-        return nil unless @value
-        self.value.to_s.rjust(width," ")
-      end
+    VALID_MERIDIANS = (4..6)
+    
+    def self.padding_width; 1; end
+    def self.padding_value; " "; end
+    
+    def valid?
+      VALID_MERIDIANS.include?(self.value.to_i)
+    end
 
   end
 end

@@ -36,8 +36,8 @@ describe "Rats" do
       end
       
       it "writes meridian" do
-        @land.meridian = 1
-        @land.meridian.should == "W1"
+        @land.meridian = 4
+        @land.meridian.should == "W4"
       end
       
     end
