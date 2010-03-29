@@ -63,7 +63,7 @@ There can be up to a maximum of 36 Sections in a township.  The number starts wi
 North of number 6 and counts up West-to-East until the number 12.  It snakes back
 and forth until it finishes at number 36 in the North-East corner.
 
-== Quarter
+=== Quarter
 a.k.a. Quarter Section
 
 from above example: [NE]
