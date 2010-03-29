@@ -1,6 +1,155 @@
 = rats
 
-Description goes here.
+a.k.a. Ruby Alberta Township System
+
+A ruby class to help with using the Alberta Township System
+
+You may find it amusing that Alberta was Rat-free ... until now.
+
+== ATS
+
+Alberta Township system is a land survey grid used in Alberta, Canada that
+divides the whole province into addressable locations.
+
+A typical location looks like: NE 1-2-3 W4
+
+Which can be broken down as follows ...
+
+=== Meridian
+
+from above example: [W4] West of the 4th Meridian
+
+The Meridian is a constant line running perpendicular to the line of longitude,
+and increments approx. every 4th line of longitude, from East to West.
+
+Alberta contains 3 of these Meridians, W4 through W6.
+
+=== Range
+a.k.a Range Lines
+
+from above example: [3]
+
+The Range is the x-axis within the given Meridian.  It increases East to West and
+resets at the next Meridian.  Each increase is approx. every 6 miles.
+
+NOTE: The longitude lines are closer together the further North you get, so as
+you go North, there is less Ranges from East to West.
+
+=== Township
+a.k.a. Township Lines
+
+from above example: [2]
+
+The Township is the y-axis with the Meridian.  It increases South to North and
+never resets, running from the Alberta-US border to the Northern border of Alberta.
+Each increase is approx. every 6 miles.
+
+NOTE: The 6x6 mile "square" indicated by the Township (line) + Range (line) +
+Meridian is confusingly called a Township.  So you have the Township line and
+the 6x6 mile Township "square".
+
+NOTE: Due to the longitude lines getting closer as you go North, there are small
+correction made South to North which results in a non-uniform stacking of Townships.
+Therefore you can not assume that going straight North from one Township to another
+will result in a Township with the same Township-line number.
+
+== Section
+
+from above example: [1]
+
+The Section represents a number 1x1 miles "square" within the 6x6 mile Township.
+There can be up to a maximum of 36 Sections in a township.  The number starts with
+1 in the South-East corner and travels West to number 6.  It then increases to 7
+North of number 6 and counts up West-to-East until the number 12.  It snakes back
+and forth until it finishes at number 36 in the North-East corner.
+
+== Quarter
+a.k.a. Quarter Section
+
+from above example: [NE]
+
+The Quarter represents a 1/2 x 1/2 mile square within the 1x1 mile Section.
+There can be 4 Quarters in a Section.  They are identified by "NE", "NW", "SE"
+and "SW".
+
+== Purpose
+
+The purpose of Rats is to make it easier to deal with location described using
+the Alberta Township System, at the Quarter, Section or Township level.
+
+=== Validation
+
+Included is validations, only allowing you to describe locations that actually
+exist. 
+
+For example, Range-line 30 is valid for Township-lines 1-18, but not 18-126.
+
+=== Parsing
+
+Included is string parsing, allowing you to extract and separate the different
+fields from multiple string representations of the location.
+
+For example, NE 1-2-3 W4 and 40300201NE are both recognized and parsed.
+
+=== Display
+
+Included is string creation that can create common representations of the
+location.
+
+=== Traversing
+
+NOTE: This is experimental and can probably be improved and made more exact.
+See 'Assumptions' to see where possible errors may exist.
+
+In this case, traverse means go North, South, East or West of a given location
+and know what the new location is.
+
+Within a Township you can traverse any direction from:
+- quarter to quarter
+- quarter to section
+- section to section
+
+When leaving a Township, you can only traverse West and East from:
+- quarter to quarter
+- quarter to section
+- quarter to township
+- section to section
+- section to township
+- township to township
+
+NOTE: The limitation in traversing from one Township to another is
+due to correction lines and the nature that Townships due no run vertical
+from North to South.  It might be possible to include a way to allow this
+but I do not currently need it.
+
+== Road Map
+
+Future:
+- add support for Saskatchewan (no timeline)
+- address bugs, if any
+
+Except for the above, once this gem is finalized, I do not see future
+development happening unless the North-South Township traversing needs
+to be addressed or I want to add ATS to other-system conversions
+(ie: latitude/longitude).  Nothing else is planned.
+
+Currently this point has not been reached and this gem is still in development.
+
+== Assumptions
+
+The only assumptions made are in respects to traversing.  I do assume that
+traversing within a township, that all sections and quarter sections are
+perfectly aligned.  If this is not correct, it must be pretty close, and
+is close enough for my purpose.
+
+I also assume that all townships are perfectly aligned from East to West.
+
+== Environment
+
+This gem was created using:
+- ruby 1.9.1-p378
+- rspec 1.3.0
+- rake 0.8.7
 
 == Note on Patches/Pull Requests
  
