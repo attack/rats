@@ -53,7 +53,7 @@ correction made South to North which results in a non-uniform stacking of Townsh
 Therefore you can not assume that going straight North from one Township to another
 will result in a Township with the same Township-line number.
 
-== Section
+=== Section
 
 from above example: [1]
 
