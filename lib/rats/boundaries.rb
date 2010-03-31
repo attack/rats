@@ -1,6 +1,24 @@
 module Rats
   class Base
     
+    # this array doesn't define what is valid, but trys to define what
+    # combinations of meridian/range/township/section exist
+    #
+    
+    # format
+    # VALID_MERIDIAN => {
+    #   # NOTE: any RANGE not listed here, does not exist
+    #   # NOTE: any TOWNSHIP not within the VALID_TOWNSHIP_RANGE does not exist
+    #   RANGE => { :townships => VALID_TOWNSHIP_RANGE,
+    #     :sections => {
+    #       # NOTE: a TOWNSHIP not included here means all sections are valid within
+    #       # NOTE: for a TOWNSHIP listed here, only a SECTION within
+    #       #   ARRAY_OF_VALID_SECTIONS is valid
+    #       VALID_TOWNSHIP => ARRAY_OF_VALID_SECTIONS
+    #     }
+    #   }
+    # }
+    
     TOWNSHIPS_BY_RANGE_AND_MERIDIAN = {
       4 => {
         1 => { :townships => 1..126 },

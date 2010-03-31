@@ -14,6 +14,18 @@ module Rats
         set_values(args)
       end
     end
+    
+    def q; @quarter; end
+    def s; @section; end
+    def t; @township; end
+    def r; @range; end
+    def m; @meridian; end
+    
+    def q=(v); @quarter = v; end
+    def s=(v); @section = v; end
+    def t=(v); @township = v; end
+    def r=(v); @range = v; end
+    def m=(v); @meridian = v ; end
 
     def quarter; @quarter.v; end
     def section; @section.v; end
@@ -26,14 +38,6 @@ module Rats
     def township=(v); @township.v = v; end
     def range=(v); @range.v = v; end
     def meridian=(v); @meridian.v = v; end
-
-    def meridian
-      'W' + @meridian.to_s
-    end
-
-    def meridian_raw
-      @meridian.to_i
-    end
 
     def location(format = :long)
       case format
@@ -54,6 +58,10 @@ module Rats
         parse_string(value)
       end
     end
+    
+    def to_s
+      long_location
+    end
 
     def scope
       if self.meridian && self.range && self.township
@@ -72,7 +80,119 @@ module Rats
     end
 
     def valid?
-      self.meridian && self.range && self.township
+      self.meridian && self.range && self.township && self.exists?
+    end
+    
+    # test that a location actually exists
+    #
+    def exists?
+      # make sure meridian exists
+      return false unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian]
+      
+      # make sure range exists
+      return false unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range]
+      
+      # make sure township exists
+      return false unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:townships].include?(self.township)
+      
+      # make sure section exists
+      
+      # it is possible all sections exists for all townships
+      if TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range].has_key?(:sections)
+        # NO, now see if this township has valid sections
+        if TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections].has_key?(self.township)
+          # YES, check further to see that this section is listed          
+          return TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections][self.township].include?(self.section)
+        else
+          # the township isn't listed, therefore it has all sections
+          return true
+        end
+      else
+        # looks like we exist
+        return true
+      end
+    end
+    
+    def up(level=nil); self.traverse(:up, level); end
+    def down(level=nil); self.traverse(:down, level); end
+    def left(level=nil); self.traverse(:left, level); end
+    def right(level=nil); self.traverse(:right, level); end
+    alias north up
+    alias south down
+    alias west left
+    alias east right
+    
+    # this just walks from location to location in the given direction until
+    # it finds the next valid location.
+    #
+    def traverse(direction, level=nil)
+      return unless direction
+      
+      new_location = self.dup
+      # change the scope of the traverse
+      # eg. allow quarter section to traverse to a section
+      #
+      case level
+      when :section
+        # we are traversing by section, remove quarter
+        new_location.q.nil!
+      when :township
+        # we are traversing by section, remove quarter & section
+        new_location.q.nil!
+        new_location.s.nil!
+      end
+
+      the_scope = new_location.scope
+      begin
+        case the_scope
+        when :quarter
+          new_location.traverse_quarter(direction)
+        when :section
+          new_location.traverse_section(direction)
+        when :township
+          new_location.traverse_range(direction)
+        end
+      end until new_location.valid?
+      new_location
+    end
+    
+    def traverse_quarter(direction)
+      begin
+        self.q = self.q.send(direction)
+      rescue OutOfSection
+        self.q = self.q.send(direction.to_s + '!')
+        self.traverse_section(direction)
+      end
+    end
+    
+    def traverse_section(direction)
+      begin
+        self.s = self.s.send(direction)
+      rescue OutOfTownship
+        self.s = self.s.send(direction.to_s + '!')
+        self.traverse_range(direction)
+      end
+    end
+    
+    def traverse_range(direction)
+      begin
+        self.r = self.r.send(direction)
+      rescue OutOfMeridian
+        self.r = self.r.send(direction.to_s + '!')
+        self.traverse_meridian(direction)
+      end
+    end
+    
+    def traverse_meridian(direction)
+      begin
+        self.m = self.m.send(direction)
+      rescue
+        raise OutOfAlberta
+      end
+    end
+    
+    def to_a
+      [self.quarter, self.section, self.township, self.range, self.meridian].compact
     end
 
     private
@@ -96,7 +216,7 @@ module Rats
       quarter = description.to_s.scan(/^\D{2}/)
       self.quarter = quarter[0].upcase if quarter && quarter.size > 0
 
-      numbers = description.to_s.scan(/\d{1,2}/)
+      numbers = description.to_s.scan(/\d{1,3}/)
       if numbers
         self.meridian = numbers.pop.to_i if numbers.size > 0
         self.range = numbers.pop.to_i if numbers.size > 0
@@ -129,9 +249,9 @@ module Rats
 
     def long_location
       if self.quarter
-        "#{self.quarter} #{[self.section,self.township,self.range].compact.join('-')} #{self.meridian}".strip
+        "#{@quarter.to_s} #{[@section.to_s,@township.to_s,@range.to_s].compact.join('-')} #{@meridian.to_s}".strip
       else
-        "#{[self.section,self.township,self.range].compact.join('-')} #{self.meridian}".strip
+        "#{[@section.to_s,@township.to_s,@range.to_s].compact.join('-')} #{@meridian.to_s}".strip
       end
     end
 

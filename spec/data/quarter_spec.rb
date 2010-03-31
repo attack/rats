@@ -21,4 +21,56 @@ describe Rats::Quarter do
     
   end
   
+  describe "traversing" do
+    
+    describe "correctly" do
+      
+      it "moves up" do
+        data = Rats::Quarter.new("SE")
+        data.up.v.should == "NE"
+      end
+      
+      it "moves right" do
+        data = Rats::Quarter.new("NW")
+        data.right.v.should == "NE"
+      end
+      
+      it "moves down" do
+        data = Rats::Quarter.new("NW")
+        data.down.v.should == "SW"
+      end
+      
+      it "moves left" do
+        data = Rats::Quarter.new("NE")
+        data.left.v.should == "NW"
+      end
+      
+    end
+    
+    describe "out of bounds" do
+      
+      it "moves up" do
+        data = Rats::Quarter.new("NE")
+        lambda { data.up }.should raise_error(Rats::OutOfBounds)
+      end
+      
+      it "moves right" do
+        data = Rats::Quarter.new("NE")
+        lambda { data.right }.should raise_error(Rats::OutOfBounds)
+      end
+      
+      it "moves down" do
+        data = Rats::Quarter.new("SE")
+        lambda { data.down }.should raise_error(Rats::OutOfBounds)
+      end
+      
+      it "moves left" do
+        data = Rats::Quarter.new("NW")
+        lambda { data.left }.should raise_error(Rats::OutOfBounds)
+      end
+      
+    end
+    
+  end
+  
 end

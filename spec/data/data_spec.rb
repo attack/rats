@@ -56,16 +56,25 @@ describe Rats::Data do
       data = Rats::Data.new(1)
       data.to_p.should == "1"
       
-      Rats::Data.should_receive(:padding_width).twice.and_return(3)
+      #Rats::Data.should_receive(:padding_width).twice.and_return(3)
+      Rats::Data.expects(:padding_width).twice.returns(3)
       data.to_p.should == "  1"
       
-      Rats::Data.should_receive(:padding_value).and_return("0")
+      #Rats::Data.should_receive(:padding_value).and_return("0")
+      Rats::Data.expects(:padding_value).returns("0")
       data.to_p.should == "001"
     end
     
     it "converts to string" do
       data = Rats::Data.new(1)
       data.to_s.should == "1"
+    end
+    
+    it "resets a value" do
+      data = Rats::Data.new(1)
+      data.v.should == 1
+      data.nil!
+      data.v.should be_nil
     end
     
   end

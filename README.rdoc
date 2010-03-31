@@ -122,6 +122,16 @@ due to correction lines and the nature that Townships due no run vertical
 from North to South.  It might be possible to include a way to allow this
 but I do not currently need it.
 
+= Usage
+
+TODO: show examples
+
+= Information
+
+== links
+
+http://en.wikipedia.org/wiki/Alberta_Township_System
+
 == Road Map
 
 Future:
@@ -143,6 +153,11 @@ perfectly aligned.  If this is not correct, it must be pretty close, and
 is close enough for my purpose.
 
 I also assume that all townships are perfectly aligned from East to West.
+
+Lastly, I assume that within every valid section, all four quarters are valid.
+This may be the false.  Even so, I do not have a list of which sections do not
+have four quarters (let alone which ones are missing), so I couldn't do anything
+about it anyway.
 
 == Environment
 
