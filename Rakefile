@@ -5,12 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "rats"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "rtec88@gmail.com"
+    gem.summary = "A ruby class to help with using the Alberta Township System"
+    gem.description = "A ruby class to help with using the Alberta Township System"
+    gem.email = "rats@attackcorp.com"
     gem.homepage = "http://github.com/attack/rats"
-    gem.authors = ["Mark"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.authors = ["Mark G"]
+    #gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

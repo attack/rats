@@ -520,7 +520,6 @@ describe "Rats" do
         end
       
       end
-
       
     end
     
@@ -578,6 +577,14 @@ describe "Rats" do
 
       end
       
+    end
+    
+    describe "chaining" do
+      
+      it "allows chaining of traversing" do
+        land = Rats.new("NE 1-2-3 W4")
+        land.up.down.left.right.location.should == "NE 1-2-3 W4"
+      end
       
     end
     

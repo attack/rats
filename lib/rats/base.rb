@@ -146,44 +146,44 @@ module Rats
       begin
         case the_scope
         when :quarter
-          new_location.traverse_quarter(direction)
+          new_location._traverse_quarter(direction)
         when :section
-          new_location.traverse_section(direction)
+          new_location._traverse_section(direction)
         when :township
-          new_location.traverse_range(direction)
+          new_location._traverse_range(direction)
         end
       end until new_location.valid?
       new_location
     end
-    
-    def traverse_quarter(direction)
+     
+    def _traverse_quarter(direction)
       begin
         self.q = self.q.send(direction)
       rescue OutOfSection
         self.q = self.q.send(direction.to_s + '!')
-        self.traverse_section(direction)
+        self._traverse_section(direction)
       end
     end
-    
-    def traverse_section(direction)
+  
+    def _traverse_section(direction)
       begin
         self.s = self.s.send(direction)
       rescue OutOfTownship
         self.s = self.s.send(direction.to_s + '!')
-        self.traverse_range(direction)
+        self._traverse_range(direction)
       end
     end
-    
-    def traverse_range(direction)
+  
+    def _traverse_range(direction)
       begin
         self.r = self.r.send(direction)
       rescue OutOfMeridian
         self.r = self.r.send(direction.to_s + '!')
-        self.traverse_meridian(direction)
+        self._traverse_meridian(direction)
       end
     end
-    
-    def traverse_meridian(direction)
+  
+    def _traverse_meridian(direction)
       begin
         self.m = self.m.send(direction)
       rescue
@@ -194,7 +194,7 @@ module Rats
     def to_a
       [self.quarter, self.section, self.township, self.range, self.meridian].compact
     end
-
+       
     private
 
     def parse_string(location)
@@ -246,6 +246,7 @@ module Rats
       self.range = values.shift.to_i if values.size > 0
       self.meridian = values.shift.to_i if values.size > 0
     end
+    
 
     def long_location
       if self.quarter
