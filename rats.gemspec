@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
      "lib/rats/data/range.rb",
      "lib/rats/data/section.rb",
      "lib/rats/data/township.rb",
+     "rats.gemspec",
      "spec/data/data_spec.rb",
      "spec/data/meridian_spec.rb",
      "spec/data/quarter_spec.rb",
