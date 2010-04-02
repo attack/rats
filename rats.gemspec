@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rats}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mark G"]
-  s.date = %q{2010-03-31}
+  s.date = %q{2010-04-02}
   s.description = %q{A ruby class to help with using the Alberta Township System}
   s.email = %q{rats@attackcorp.com}
   s.extra_rdoc_files = [
