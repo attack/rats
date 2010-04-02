@@ -239,12 +239,11 @@ module Rats
     end
 
     def set_values(values)
-      #self.quarter = values.shift
-      self.quarter = values.shift.to_s if values.size > 0
-      self.section = values.shift.to_i if values.size > 0
-      self.township = values.shift.to_i if values.size > 0
-      self.range = values.shift.to_i if values.size > 0
       self.meridian = values.shift.to_i if values.size > 0
+      self.range = values.shift.to_i if values.size > 0
+      self.township = values.shift.to_i if values.size > 0
+      self.section = values.shift.to_i if values.size > 0
+      self.quarter = values.shift.to_s if values.size > 0
     end
     
 

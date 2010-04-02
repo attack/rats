@@ -124,7 +124,23 @@ but I do not currently need it.
 
 = Usage
 
-TODO: show examples
+# parse a location
+quarter_section = Rats.new("NE 1-2-3 W4")
+
+# print the location
+quarter_section.location
+
+# read the attributes
+quarter_section.quarter
+quarter_section.section
+quarter_section.township
+quarter_section.range
+quarter_section.meridian
+
+# traverse
+new_quarter_section = quarter_section.left
+new_quarter_section = quarter_section.left.down
+new_section = quarter_section.left(:section)
 
 = Information
 
@@ -135,7 +151,8 @@ http://en.wikipedia.org/wiki/Alberta_Township_System
 == Road Map
 
 Future:
-- add support for Saskatchewan (no timeline)
+- correct assumption #3 (see below)
+- add support for Saskatchewan (no timeline, need to find data)
 - address bugs, if any
 
 Except for the above, once this gem is finalized, I do not see future
@@ -147,17 +164,29 @@ Currently this point has not been reached and this gem is still in development.
 
 == Assumptions
 
+I make 3 key assumptions.
+
 The only assumptions made are in respects to traversing.  I do assume that
-traversing within a township, that all sections and quarter sections are
+(#1) traversing within a township, that all sections and quarter sections are
 perfectly aligned.  If this is not correct, it must be pretty close, and
 is close enough for my purpose.
 
-I also assume that all townships are perfectly aligned from East to West.
+(#2) I also assume that all townships are perfectly aligned from East to West.
 
-Lastly, I assume that within every valid section, all four quarters are valid.
-This may be the false.  Even so, I do not have a list of which sections do not
-have four quarters (let alone which ones are missing), so I couldn't do anything
-about it anyway.
+UPDATE: Based on some GPS data I have access to, the range line (x-axis)
+doesn't seem to run perfectly straight from East-to-West, but actually drops
+a bit South as you go West.  I still assume that quarters/sections/townships
+are aligned East-to-West, or rather Right-to-Left, they just follow this pattern
+of dropping a bit South as you go West.  What this means is that the functions
+I use to traverse locations are a bit of a lie.  The function .east() and .west()
+imply that you are traversing East and West, when they are actually slightly askew,
+and could be called .east_and_ever_so_slightly_south() and
+.west_and_ever_so_slightly_north() ... but I will leave them named as is.
+
+(#3) Lastly, I assume that within every valid section, all four quarters are valid.
+This has been confirmed to be incorrect.  I have recently found a way to get this
+data but it will take some time to collect it.  I will remove this assumption in a
+future version.
 
 == Environment
 
@@ -178,4 +207,4 @@ This gem was created using:
 
 == Copyright
 
-Copyright (c) 2010 Mark. See LICENSE for details.
+Copyright (c) 2010 Mark sG. See LICENSE for details.

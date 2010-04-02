@@ -138,7 +138,8 @@ describe "Rats" do
     end
     
     it "understands individual values" do
-      land = Rats.new("NE", 1, 2, 3, 4)
+      #land = Rats.new("NE", 1, 2, 3, 4)
+      land = Rats.new(4, 3, 2, 1, "NE")
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
@@ -172,7 +173,8 @@ describe "Rats" do
 
       it "using location and individual values" do
         land = Rats.new
-        land.location = ["NE", 1, 2, 3, 4]
+        #land.location = ["NE", 1, 2, 3, 4]
+        land.location = [4, 3, 2, 1, "NE"]
         land.quarter.should == "NE"
         land.section.should == 1
         land.township.should == 2
