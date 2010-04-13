@@ -21,34 +21,6 @@ describe Rats::Township do
     
   end
   
-  describe "traversing" do
-    
-    describe "correctly" do
-      
-      it "moves up" do
-        data = Rats::Township.new("5")
-        lambda { data.up }.should raise_error(Rats::IllegalTraverse)
-      end
-      
-      it "moves right" do
-        data = Rats::Township.new("5")
-        lambda { data.up }.should raise_error(Rats::IllegalTraverse)
-      end
-      
-      it "moves down" do
-        data = Rats::Township.new("5")
-        lambda { data.up }.should raise_error(Rats::IllegalTraverse)
-      end
-      
-      it "moves left" do
-        data = Rats::Township.new("5")
-        lambda { data.up }.should raise_error(Rats::IllegalTraverse)
-      end
-      
-    end
-
-  end
-  
   describe "read/write" do
     
     it "returns a padded value" do

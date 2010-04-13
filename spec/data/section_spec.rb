@@ -21,58 +21,6 @@ describe Rats::Section do
     
   end
   
-  describe "traversing" do
-    
-    describe "correctly" do
-      
-      it "moves up" do
-        data = Rats::Section.new("6")
-        data.up.v.should == 7
-      end
-      
-      it "moves right" do
-        data = Rats::Section.new("6")
-        data.right.v.should == 5
-      end
-      
-      it "moves down" do
-        data = Rats::Section.new("7")
-        data.down.v.should == 6
-      end
-      
-      it "moves left" do
-        data = Rats::Section.new("1")
-        data.left.v.should == 2
-      end
-      
-    end
-    
-    describe "out of bounds" do
-      
-      it "moves up" do
-        data = Rats::Section.new("36")
-        lambda { data.up }.should raise_error(Rats::OutOfBounds)
-      end
-      
-      it "moves right" do
-        data = Rats::Section.new("1")
-        lambda { data.right }.should raise_error(Rats::OutOfBounds)
-      end
-      
-      it "moves down" do
-        data = Rats::Section.new("1")
-        lambda { data.down }.should raise_error(Rats::OutOfBounds)
-      end
-      
-      it "moves left" do
-        data = Rats::Section.new("6")
-        lambda { data.left }.should raise_error(Rats::OutOfBounds)
-      end
-      
-    end
-
-  end
-  
   describe "read/write" do
     
     it "returns a padded value" do

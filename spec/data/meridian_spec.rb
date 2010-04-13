@@ -21,34 +21,6 @@ describe Rats::Meridian do
     
   end
   
-  describe "traversing" do
-    
-    describe "correctly" do
-      
-      it "moves up" do
-        data = Rats::Meridian.new("5")
-        lambda { data.up }.should raise_error(Rats::IllegalTraverse)
-      end
-      
-      it "moves right" do
-        data = Rats::Meridian.new("5")
-        data.right.v.should == 4
-      end
-      
-      it "moves down" do
-        data = Rats::Meridian.new("5")
-        lambda { data.up }.should raise_error(Rats::IllegalTraverse)
-      end
-      
-      it "moves left" do
-        data = Rats::Meridian.new("5")
-        data.left.v.should == 6
-      end
-      
-    end
-
-  end
-  
   describe "read/write" do
     
     it "returns a padded value" do

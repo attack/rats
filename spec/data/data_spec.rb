@@ -79,44 +79,4 @@ describe Rats::Data do
     
   end
   
-  describe "traversing" do
-    
-    before(:each) do
-      @data = Rats::Data.new
-    end
-    
-    it "stubs left" do
-      lambda { @data.left }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs west" do
-      lambda { @data.west }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs right" do
-      lambda { @data.right }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs east" do
-      lambda { @data.east }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs up" do
-      lambda { @data.up }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs north" do
-      lambda { @data.north }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs down" do
-      lambda { @data.down }.should raise_error(NotImplementedError)
-    end
-    
-    it "stubs south" do
-      lambda { @data.south }.should raise_error(NotImplementedError)
-    end
-    
-  end
-  
 end

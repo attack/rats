@@ -43,32 +43,6 @@ module Rats
       return nil unless @value
       self.value.to_s.rjust(self.class.padding_width,self.class.padding_value)
     end
-  
-    #
-    # TRAVERSING
-    #
-    # - it is expected that a specfic data sub-class will define this
-    #
-    
-    def up; traverse(:up); end
-    def up!; traverse!(:up); end
-    alias north up
-    alias north! up!
-    
-    def right; traverse(:right); end
-    def right!; traverse!(:right); end
-    alias east right
-    alias east! right!
-    
-    def down; traverse(:down); end
-    def down!; traverse!(:down); end
-    alias south down
-    alias south! down!
-    
-    def left; traverse(:left); end
-    def left!; traverse!(:left); end
-    alias west left
-    alias west! left!
     
     #
     # VALIDATION
@@ -79,11 +53,6 @@ module Rats
     def valid?
       true
     end
-    
-    private
-    
-    def traverse(direction); raise NotImplementedError; end
-    def traverse!(direction); raise NotImplementedError; end
   
   end
 end

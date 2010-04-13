@@ -13,11 +13,9 @@ module Rats
   # custom errors
   #
   class OutOfBounds < StandardError; end
-  class OutOfSection < OutOfBounds; end
-  class OutOfTownship < OutOfBounds; end
-  class OutOfMeridian < OutOfBounds; end
-  class OutOfAlberta < OutOfBounds; end
-  
-  class IllegalTraverse < StandardError; end
-  
+  #class OutOfSection < OutOfBounds; end
+  #class OutOfTownship < OutOfBounds; end
+  #class OutOfMeridian < OutOfBounds; end
+  #class OutOfAlberta < OutOfBounds; end
+    
 end

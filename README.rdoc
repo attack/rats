@@ -2,7 +2,8 @@
 
 a.k.a. Ruby Alberta Township System
 
-A ruby class to help with using the Alberta Township System
+A ruby class to help with using the Alberta Township System.  This class will allow
+you to create and represent townships, sections and quarter sections.
 
 You may find it amusing that Alberta was Rat-free ... until now.
 
@@ -96,32 +97,6 @@ For example, NE 1-2-3 W4 and 40300201NE are both recognized and parsed.
 Included is string creation that can create common representations of the
 location.
 
-=== Traversing
-
-NOTE: This is experimental and can probably be improved and made more exact.
-See 'Assumptions' to see where possible errors may exist.
-
-In this case, traverse means go North, South, East or West of a given location
-and know what the new location is.
-
-Within a Township you can traverse any direction from:
-- quarter to quarter
-- quarter to section
-- section to section
-
-When leaving a Township, you can only traverse West and East from:
-- quarter to quarter
-- quarter to section
-- quarter to township
-- section to section
-- section to township
-- township to township
-
-NOTE: The limitation in traversing from one Township to another is
-due to correction lines and the nature that Townships due no run vertical
-from North to South.  It might be possible to include a way to allow this
-but I do not currently need it.
-
 = Usage
 
 # parse a location
@@ -137,11 +112,6 @@ quarter_section.township
 quarter_section.range
 quarter_section.meridian
 
-# traverse
-new_quarter_section = quarter_section.left
-new_quarter_section = quarter_section.left.down
-new_section = quarter_section.left(:section)
-
 = Information
 
 == links
@@ -151,47 +121,26 @@ http://en.wikipedia.org/wiki/Alberta_Township_System
 == Road Map
 
 Future:
-- correct assumption #3 (see below)
+- either correct the assumption that all quarters are valid in a valid
+  section, or remove validation completely (re: all or none)
 - add support for Saskatchewan (no timeline, need to find data)
 - address bugs, if any
 
 Except for the above, once this gem is finalized, I do not see future
-development happening unless the North-South Township traversing needs
-to be addressed or I want to add ATS to other-system conversions
+development happening unless I want to add ATS to other-system conversions
 (ie: latitude/longitude).  Nothing else is planned.
 
 Currently this point has not been reached and this gem is still in development.
 
 == Assumptions
 
-I make 3 key assumptions.
-
-The only assumptions made are in respects to traversing.  I do assume that
-(#1) traversing within a township, that all sections and quarter sections are
-perfectly aligned.  If this is not correct, it must be pretty close, and
-is close enough for my purpose.
-
-(#2) I also assume that all townships are perfectly aligned from East to West.
-
-UPDATE: Based on some GPS data I have access to, the range line (x-axis)
-doesn't seem to run perfectly straight from East-to-West, but actually drops
-a bit South as you go West.  I still assume that quarters/sections/townships
-are aligned East-to-West, or rather Right-to-Left, they just follow this pattern
-of dropping a bit South as you go West.  What this means is that the functions
-I use to traverse locations are a bit of a lie.  The function .east() and .west()
-imply that you are traversing East and West, when they are actually slightly askew,
-and could be called .east_and_ever_so_slightly_south() and
-.west_and_ever_so_slightly_north() ... but I will leave them named as is.
-
-(#3) Lastly, I assume that within every valid section, all four quarters are valid.
-This has been confirmed to be incorrect.  I have recently found a way to get this
-data but it will take some time to collect it.  I will remove this assumption in a
-future version.
+As currently written, I assume that within every valid section, all four quarters
+are valid. I know this to be incorrect.
 
 == Environment
 
 This gem was created using:
-- ruby 1.9.1-p378
+- ruby 1.9.1-p378, 1.9.2-head
 - rspec 1.3.0
 - rake 0.8.7
 
