@@ -205,7 +205,7 @@ module Rats
     end
 
     def short_location
-      [@quarter.to_p,@section.to_p,@township.to_p,@range.to_p,@meridian.to_p].compact.join('').strip
+      [@meridian.to_p,@range.to_p,@township.to_p,@section.to_p,@quarter.to_p].compact.join('').strip
     end
     
     def long_location

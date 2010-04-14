@@ -1,6 +1,9 @@
 module Rats
   class Base
     
+    # TODO: this data needs to be updated to list the sections where not
+    #       all quarters are valid, and list whoch ones are.
+    
     # this array doesn't define what is valid, but trys to define what
     # combinations of meridian/range/township/section exist
     #
@@ -15,6 +18,45 @@ module Rats
     #       # NOTE: for a TOWNSHIP listed here, only a SECTION within
     #       #   ARRAY_OF_VALID_SECTIONS is valid
     #       VALID_TOWNSHIP => ARRAY_OF_VALID_SECTIONS
+    #     },
+    #     # NOTE: a SECTION not included here means all QUARTERs are valid within
+    #     # NOTE: for a SECTION listed here, only a QUARTER within
+    #     #   ARRAY_OF_VALID_QUARTERS is valid
+    #     VALID_SECTION => ARRAY_OF_VALID_QUARTERS
+    #   }
+    # }
+    
+    # proposed format (allows for quarters to be listed)
+    #
+    # TOWNSHIPS_BY_RANGE_AND_MERIDIAN = {
+    #   # only valid meridian listed here
+    #   4 => {
+    #     # only valid ranges listed here
+    #     1 => {
+    #       # only valid township range listed here
+    #       :townships => 1..126
+    #       # no specifics past this, means all sections and quarters are valid
+    #     },
+    #     # another valid range
+    #     21 => {
+    #       # only valid townships listed here
+    #       :townships => 1..126,
+    #       # list exceptions specific to certain townships
+    #       :township => {
+    #         # township listed here has exceptions, otherwise treat as normal
+    #         3 => {
+    #           # only valid sections listed here
+    #           :sections => [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,22,23,24,25,26,27,28,31,32,33,34,35,36],
+    #           # list exceptions specific to certain sections
+    #           :section => {
+    #             # section listed here has exceptions, otherwise treat as normal
+    #             36 => {
+    #               # only valid quarters listed here
+    #               :quarters => [:ne, :se]
+    #             }
+    #           }
+    #         }
+    #       }
     #     }
     #   }
     # }

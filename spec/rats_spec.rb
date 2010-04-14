@@ -55,6 +55,24 @@ describe "Rats" do
       land.meridian.should == 4
     end
     
+    it "understands NE-1-2-3-W4" do
+      land = Rats.new("NE-1-2-3-W4")
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == 4
+    end
+    
+    it "understands NE-1-2-3-4" do
+      land = Rats.new("NE-1-2-3-4")
+      land.quarter.should == "NE"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == 4
+    end
+    
     it "understands NE 1-1-1-4" do
       land = Rats.new("NE 1-2-3-4")
       land.quarter.should == "NE"
@@ -267,17 +285,17 @@ describe "Rats" do
     
       it "returns NE01002034" do
         land = Rats.new("NE 1-2-3 W4")
-        land.location(:short).should == "NE01002034"
+        land.location(:short).should == "40300201NE"
       end
       
       it "returns 01001014" do
         land = Rats.new("1-2-3 W4")
-        land.location(:short).should == "01002034"
+        land.location(:short).should == "40300201"
       end
 
       it "returns 001014" do
         land = Rats.new("2-3 W4")
-        land.location(:short).should == "002034"
+        land.location(:short).should == "403002"
       end
 
     end
