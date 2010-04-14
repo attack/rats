@@ -36,7 +36,6 @@ describe Rats::Data do
         @data.v.should == 1
         @data.value.should == 1
       end
-      
     end
     
   end
@@ -46,6 +45,11 @@ describe Rats::Data do
     it "stubs valid? with true" do
       data = Rats::Data.new
       data.valid?.should be_true
+    end
+    
+    it "responds to error" do
+      data = Rats::Data.new
+      data.respond_to?('error').should be_true
     end
     
   end
@@ -75,6 +79,30 @@ describe Rats::Data do
       data.v.should == 1
       data.nil!
       data.v.should be_nil
+    end
+    
+  end
+  
+  describe "errors" do
+    
+    it "responds to raise_errors!" do
+      data = Rats::Data.new
+      data.respond_to?('raise_errors!').should be_true
+    end
+    
+    it "responds to raise_errors?" do
+      data = Rats::Data.new
+      data.respond_to?('raise_errors?').should be_true
+    end
+    
+    it "doesn't initially raise errors" do
+      data = Rats::Data.new
+      data.raise_errors?.should be_false
+    end
+    
+    it "will raise errors if set" do
+      data = Rats::Data.new(nil, true)
+      data.raise_errors?.should be_true
     end
     
   end

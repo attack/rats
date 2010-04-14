@@ -1,6 +1,8 @@
 module Rats
   class Base
     
+    attr_accessor :errors
+    
     def initialize(*args)
       return unless args.flatten!
       @quarter = Rats::Quarter.new
@@ -8,6 +10,7 @@ module Rats
       @township = Rats::Township.new
       @range = Rats::Range.new
       @meridian = Rats::Meridian.new
+      @errors = {}
       if args.size == 1
         parse_string(args.pop)
       else
@@ -39,14 +42,14 @@ module Rats
     def range=(v); @range.v = v; end
     def meridian=(v); @meridian.v = v; end
 
-    def location(format = :long)
+    def location(format = :default)
       case format
       when :short
         short_location
       when :long
         long_location
       else
-        long_location
+        default_location
       end
     end
 
@@ -60,7 +63,7 @@ module Rats
     end
     
     def to_s
-      long_location
+      default_location
     end
 
     def scope
@@ -79,21 +82,40 @@ module Rats
       end
     end
 
-    def valid?
-      self.meridian && self.range && self.township && self.exists?
+    def valid?      
+      # check each data field individually
+      [:meridian, :range, :township, :section, :quarter].each do |data|
+        valid = self.send(data.to_s.slice(0)).valid?
+        add_error(data, self.send(data.to_s.slice(0)).error) unless valid
+      end
+      
+      # check each field as it relates to others
+      self.exists? unless self.errors.size > 0
+      
+      # are we valid?
+      self.errors.size == 0
     end
     
     # test that a location actually exists
     #
     def exists?
       # make sure meridian exists
-      return false unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian]
+      unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian]
+        add_error(:land, 'does not exist')
+        return false
+      end
       
       # make sure range exists
-      return false unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range]
+      unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range]
+        add_error(:land, 'does not exist')
+        return false
+      end
       
       # make sure township exists
-      return false unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:townships].include?(self.township)
+      unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:townships].include?(self.township)
+        add_error(:land, 'does not exist')
+        return false
+      end
       
       # make sure section exists
       
@@ -102,7 +124,12 @@ module Rats
         # NO, now see if this township has valid sections
         if TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections].has_key?(self.township)
           # YES, check further to see that this section is listed          
-          return TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections][self.township].include?(self.section)
+          unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections][self.township].include?(self.section)
+            add_error(:land, 'does not exist')
+            return false
+          else
+            return true
+          end
         else
           # the township isn't listed, therefore it has all sections
           return true
@@ -169,7 +196,7 @@ module Rats
     end
     
 
-    def long_location
+    def default_location
       if self.quarter
         "#{@quarter.to_s} #{[@section.to_s,@township.to_s,@range.to_s].compact.join('-')} #{@meridian.to_s}".strip
       else
@@ -179,6 +206,23 @@ module Rats
 
     def short_location
       [@quarter.to_p,@section.to_p,@township.to_p,@range.to_p,@meridian.to_p].compact.join('').strip
+    end
+    
+    def long_location
+      quarter_section = []
+      quarter_section << self.q.fullname if self.q && self.q.fullname.size > 0
+      quarter_section << self.s.fullname if self.s && self.s.fullname.size > 0
+      parts = []
+      parts << quarter_section.compact.join(' of ') if quarter_section && quarter_section.size > 0
+      parts << self.t.fullname
+      parts << self.r.fullname
+      parts << self.m.fullname
+      parts.compact.join(', ')
+    end
+    
+    def add_error(index, the_error)
+      @errors[index] = [] unless @errors.has_key?(index)
+      @errors[index] << the_error 
     end
     
   end

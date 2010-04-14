@@ -9,14 +9,16 @@ describe Rats::Township do
   
   describe "boundaries" do
     
-    it "allows valid data" do
+    it "knows valid data" do
       data = Rats::Township.new(6)
       data.valid?.should be_true
+      data.error.should be_nil
     end
     
-    it "doesn't allow bad data" do
-      data = Rats::Township.new
-      lambda { data.value = 130 }.should raise_error(ArgumentError)
+    it "knows invalid data" do
+      data = Rats::Township.new(130)
+      data.valid?.should be_false
+      data.error.should == "not allowed"
     end
     
   end
@@ -36,6 +38,11 @@ describe Rats::Township do
     it "returns a string" do
       data = Rats::Township.new('4')
       data.to_s.should == '4'
+    end
+    
+    it "writes the fullname" do
+      data = Rats::Township.new('4')
+      data.fullname.should == 'Township 4'
     end
     
     describe "transforming" do

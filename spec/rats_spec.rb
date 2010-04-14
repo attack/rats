@@ -37,7 +37,6 @@ describe "Rats" do
       
       it "writes meridian" do
         @land.meridian = 4
-        #@land.meridian.should == "W4"
         @land.meridian.should == 4
       end
       
@@ -53,7 +52,6 @@ describe "Rats" do
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -63,7 +61,6 @@ describe "Rats" do
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -73,7 +70,6 @@ describe "Rats" do
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -83,19 +79,8 @@ describe "Rats" do
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
-    
-    # NOT SURE THIS IS USEFUL
-    # it "understands NE01002034" do
-    #   land = Rats.new("NE01002034")
-    #   land.quarter.should == "NE"
-    #   land.section.should == 1
-    #   land.township.should == 2
-    #   land.range.should == 3
-    #   land.meridian.should == "W4"
-    # end
     
     it "understands 1-2-3 W4" do
       land = Rats.new("1-2-3 W4")
@@ -103,7 +88,6 @@ describe "Rats" do
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -113,7 +97,6 @@ describe "Rats" do
       land.section.should be_nil
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -123,7 +106,6 @@ describe "Rats" do
       land.section.should be_nil
       land.township.should be_nil
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -133,18 +115,15 @@ describe "Rats" do
       land.section.should be_nil
       land.township.should be_nil
       land.range.should be_nil
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
     it "understands individual values" do
-      #land = Rats.new("NE", 1, 2, 3, 4)
       land = Rats.new(4, 3, 2, 1, "NE")
       land.quarter.should == "NE"
       land.section.should == 1
       land.township.should == 2
       land.range.should == 3
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -154,7 +133,6 @@ describe "Rats" do
       land.section.should == 1
       land.township.should == 119
       land.range.should == 24
-      #land.meridian.should == "W4"
       land.meridian.should == 4
     end
     
@@ -167,20 +145,17 @@ describe "Rats" do
         land.section.should == 1
         land.township.should == 2
         land.range.should == 3
-        #land.meridian.should == "W4"
         land.meridian.should == 4
       end
 
       it "using location and individual values" do
         land = Rats.new
-        #land.location = ["NE", 1, 2, 3, 4]
         land.location = [4, 3, 2, 1, "NE"]
         land.quarter.should == "NE"
         land.section.should == 1
         land.township.should == 2
         land.range.should == 3
         land.meridian.should == 4
-        #land.meridian.to_s.should == "W4"
       end
       
     end
@@ -223,22 +198,53 @@ describe "Rats" do
   describe "boundaries" do
                     
     it "knows when a township is North of Alberta" do
-      lambda { Rats.new("SE 1-127-1 W4") }.should raise_error(ArgumentError)
+      land = Rats.new("SE 1-127-1 W4")
+      land.valid?.should be_false
+      land.errors.size.should == 1
+      land.errors.has_key?(:township).should be_true
+      land.errors[:township].first.should == 'not allowed'
     end
     
     it "knows when a township is East of Alberta" do
-      lambda { Rats.new("SE 1-1-1 W3") }.should raise_error(ArgumentError)
+      land = Rats.new("SE 1-1-1 W3")
+      land.valid?.should be_false
+      land.errors.size.should == 1
+      land.errors.has_key?(:meridian).should be_true
+      land.errors[:meridian].first.should == 'not allowed'
     end
     
     it "knows when a township is West of Alberta" do
-      lambda { Rats.new("SE 1-1-1 W7") }.should raise_error(ArgumentError)
+      land = Rats.new("SE 1-1-1 W7")
+      land.valid?.should be_false
+      land.errors.size.should == 1
+      land.errors.has_key?(:meridian).should be_true
+      land.errors[:meridian].first.should == 'not allowed'
     end
+    
+    it "knows when a township has been squeezed out" do
+      land = Rats.new("SE 1-126-25 W4")
+      land.valid?.should be_false
+      land.errors.size.should == 1
+      land.errors.has_key?(:land).should be_true
+      land.errors[:land].first.should == 'does not exist'
+    end
+    
+    it "knows when a section has been squeezed out" do
+      land = Rats.new("SE 6-119-24 W4")
+      land.valid?.should be_false
+      land.errors.size.should == 1
+      land.errors.has_key?(:land).should be_true
+      land.errors[:land].first.should == 'does not exist'
+    end
+    
+    # it "knows when a quarter has been squeezed out" do
+    # end
     
   end
   
   describe "formatting" do
     
-    describe ":long" do
+    describe ":default" do
     
       it "returns NE 1-2-3 W4" do
         land = Rats.new("NE 1-2-3 W4")
@@ -274,6 +280,25 @@ describe "Rats" do
         land.location(:short).should == "002034"
       end
 
+    end
+    
+    describe ":long" do
+          
+      it "returns the long version with Quarter" do
+        land = Rats.new("NE 1-2-3 W4")
+        land.location(:long).should == "the Northeast Quarter of Section 1, Township 2, Range 3, West of the Fourth Meridian"
+      end
+      
+      it "returns the long version with Section" do
+        land = Rats.new("1-2-3 W4")
+        land.location(:long).should == "Section 1, Township 2, Range 3, West of the Fourth Meridian"
+      end
+      
+      it "returns the long version with Township" do
+        land = Rats.new("2-3 W4")
+        land.location(:long).should == "Township 2, Range 3, West of the Fourth Meridian"
+      end
+      
     end
     
   end

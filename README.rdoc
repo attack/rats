@@ -5,7 +5,7 @@ a.k.a. Ruby Alberta Township System
 A ruby class to help with using the Alberta Township System.  This class will allow
 you to create and represent townships, sections and quarter sections.
 
-You may find it amusing that Alberta was Rat-free ... until now.
+You may find it amusing that Alberta is Rat-free ... until now.
 
 == ATS
 
@@ -18,7 +18,7 @@ Which can be broken down as follows ...
 
 === Meridian
 
-from above example: [W4] West of the 4th Meridian
+from above example: [= W4] or West of the 4th Meridian
 
 The Meridian is a constant line running perpendicular to the line of longitude,
 and increments approx. every 4th line of longitude, from East to West.
@@ -28,7 +28,7 @@ Alberta contains 3 of these Meridians, W4 through W6.
 === Range
 a.k.a Range Lines
 
-from above example: [3]
+from above example: [= 3]
 
 The Range is the x-axis within the given Meridian.  It increases East to West and
 resets at the next Meridian.  Each increase is approx. every 6 miles.
@@ -39,9 +39,9 @@ you go North, there is less Ranges from East to West.
 === Township
 a.k.a. Township Lines
 
-from above example: [2]
+from above example: [= 2]
 
-The Township is the y-axis with the Meridian.  It increases South to North and
+The Township is the y-axis within the Meridian.  It increases South to North and
 never resets, running from the Alberta-US border to the Northern border of Alberta.
 Each increase is approx. every 6 miles.
 
@@ -49,16 +49,11 @@ NOTE: The 6x6 mile "square" indicated by the Township (line) + Range (line) +
 Meridian is confusingly called a Township.  So you have the Township line and
 the 6x6 mile Township "square".
 
-NOTE: Due to the longitude lines getting closer as you go North, there are small
-correction made South to North which results in a non-uniform stacking of Townships.
-Therefore you can not assume that going straight North from one Township to another
-will result in a Township with the same Township-line number.
-
 === Section
 
-from above example: [1]
+from above example: [= 1]
 
-The Section represents a number 1x1 miles "square" within the 6x6 mile Township.
+The Section represents a 1x1 mile "square" within the 6x6 mile Township.
 There can be up to a maximum of 36 Sections in a township.  The number starts with
 1 in the South-East corner and travels West to number 6.  It then increases to 7
 North of number 6 and counts up West-to-East until the number 12.  It snakes back
@@ -67,7 +62,7 @@ and forth until it finishes at number 36 in the North-East corner.
 === Quarter
 a.k.a. Quarter Section
 
-from above example: [NE]
+from above example: [= NE]
 
 The Quarter represents a 1/2 x 1/2 mile square within the 1x1 mile Section.
 There can be 4 Quarters in a Section.  They are identified by "NE", "NW", "SE"
@@ -81,16 +76,20 @@ the Alberta Township System, at the Quarter, Section or Township level.
 === Validation
 
 Included is validations, only allowing you to describe locations that actually
-exist. 
+exist.
 
 For example, Range-line 30 is valid for Township-lines 1-18, but not 18-126.
+
+NOTE: At the moment, invalid quarters within valid sections are not currently
+identified.
 
 === Parsing
 
 Included is string parsing, allowing you to extract and separate the different
 fields from multiple string representations of the location.
 
-For example, NE 1-2-3 W4 and 40300201NE are both recognized and parsed.
+For example, NE 1-2-3 W4 and 40300201NE are both recognized and parsed, representing
+the same location.
 
 === Display
 
@@ -99,18 +98,21 @@ location.
 
 = Usage
 
-# parse a location
-quarter_section = Rats.new("NE 1-2-3 W4")
+Parse a location
 
-# print the location
-quarter_section.location
+  quarter_section = Rats.new("NE 1-2-3 W4")
 
-# read the attributes
-quarter_section.quarter
-quarter_section.section
-quarter_section.township
-quarter_section.range
-quarter_section.meridian
+Print the location
+
+  quarter_section.location
+
+Read the attributes
+
+  quarter_section.quarter
+  quarter_section.section
+  quarter_section.township
+  quarter_section.range
+  quarter_section.meridian
 
 = Information
 
@@ -135,7 +137,8 @@ Currently this point has not been reached and this gem is still in development.
 == Assumptions
 
 As currently written, I assume that within every valid section, all four quarters
-are valid. I know this to be incorrect.
+are valid. I know this to be incorrect, but I can not correct this until I know which
+cases this assumption breaks down.
 
 == Environment
 

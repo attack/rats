@@ -7,16 +7,23 @@ describe Rats::Quarter do
     data.is_a?(Rats::Quarter).should be_true
   end
   
+  it "returns the full_name" do
+    data = Rats::Quarter.new('NE')
+    data.fullname.should == "the Northeast Quarter"
+  end
+  
   describe "boundaries" do
     
-    it "allows valid data" do
-      data = Rats::Quarter.new("NE")
+    it "knows valid data" do
+      data = Rats::Quarter.new('NE')
       data.valid?.should be_true
+      data.error.should be_nil
     end
     
-    it "doesn't allow bad data" do
-      data = Rats::Quarter.new
-      lambda { data.value = "bad" }.should raise_error(ArgumentError)
+    it "knows invalid data" do
+      data = Rats::Quarter.new('bad')
+      data.valid?.should be_false
+      data.error.should == "not allowed"
     end
     
   end

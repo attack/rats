@@ -9,13 +9,20 @@ describe Rats::Meridian do
   
   describe "boundaries" do
     
-    it "allows valid data" do
+    it "knows valid data" do
       data = Rats::Meridian.new(6)
       data.valid?.should be_true
     end
     
-    it "doesn't allow bad data" do
+    it "knows invalid data" do
+      data = Rats::Meridian.new(3)
+      data.valid?.should be_false
+      data.error.should == "not allowed"
+    end
+    
+    it "raises error with invalid data" do
       data = Rats::Meridian.new
+      data.raise_errors!
       lambda { data.value = 3 }.should raise_error(ArgumentError)
     end
     
@@ -41,6 +48,11 @@ describe Rats::Meridian do
     it "writes just the integer" do
       data = Rats::Meridian.new('W4')
       data.v.should == 4
+    end
+    
+    it "writes the fullname" do
+      data = Rats::Meridian.new('W4')
+      data.fullname.should == 'West of the Fourth Meridian'
     end
     
     describe "transforming" do

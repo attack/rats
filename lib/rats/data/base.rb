@@ -1,13 +1,17 @@
 module Rats
   class Data
   
-    attr_accessor :value
+    ERROR = "not allowed"
+    attr_accessor :value, :raise_errors, :error
   
-    def initialize(value=nil)
+    def initialize(value=nil, raise_errors=false)
       self.value = value
+      self.raise_errors = raise_errors
     end
     
     def nil!; @value = nil; end
+    def raise_errors!; @raise_errors = true; end
+    def raise_errors?; @raise_errors == true; end
     
     #
     # READ & WRITE
@@ -16,7 +20,7 @@ module Rats
     def value=(value)
       return unless value
       @value = self.class.transform(value)
-      raise ArgumentError unless self.valid?
+      raise ArgumentError if self.raise_errors? && !self.valid?
     end
     alias v= value=
     alias v value
@@ -51,6 +55,18 @@ module Rats
     #
     
     def valid?
+      set_error! unless valid = validate!
+      valid
+    end
+
+
+    private
+
+    def set_error!
+      self.error = ERROR
+    end
+    
+    def validate!
       true
     end
   

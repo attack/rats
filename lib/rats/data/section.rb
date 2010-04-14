@@ -11,7 +11,13 @@ module Rats
       value.to_i > 0 ? value.to_i : nil
     end
     
-    def valid?
+    def fullname
+      @value && @value.to_i > 0 ? "Section #{@value}" : ''
+    end
+    
+    private
+    
+    def validate!
       VALID_SECTIONS.include?(self.value.to_i)
     end
    
