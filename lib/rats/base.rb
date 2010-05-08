@@ -85,8 +85,8 @@ module Rats
     def valid?      
       # check each data field individually
       [:meridian, :range, :township, :section, :quarter].each do |data|
-        valid = self.send(data.to_s.slice(0)).valid?
-        add_error(data, self.send(data.to_s.slice(0)).error) unless valid
+        valid = self.send(data.to_s.chars.first).valid?
+        add_error(data, self.send(data.to_s.chars.first).error) unless valid
       end
       
       # check each field as it relates to others
@@ -158,7 +158,7 @@ module Rats
     end
 
     def location_type?(location)
-      location.to_s.match(/^\d{8}\D{2}/) ? :parcel_id : :description
+      location.to_s.match(/^\d{8}\D{0,2}/) ? :parcel_id : :description
     end
 
     def parse_description(description)
@@ -176,9 +176,9 @@ module Rats
     end
 
     def parse_parcel_id(parcel_id)
-      result = parcel_id.to_s.scan(/^(\d{1})(\d{2})(\d{3})(\d{2})(\D{2})/)
+      result = parcel_id.to_s.scan(/^(\d{1})(\d{2})(\d{3})(\d{2})(\D{2})?/)      
       return unless result && result.size > 0
-      numbers = result.pop
+      numbers = result.pop.compact      
       self.meridian = numbers.shift.to_i if numbers.size > 0
       self.range = numbers.shift.to_i if numbers.size > 0
       self.township = numbers.shift.to_i if numbers.size > 0
@@ -210,10 +210,10 @@ module Rats
     
     def long_location
       quarter_section = []
-      quarter_section << self.q.fullname if self.q && self.q.fullname.size > 0
-      quarter_section << self.s.fullname if self.s && self.s.fullname.size > 0
+      quarter_section << self.q.fullname if (self.q && self.q.fullname.size > 0)
+      quarter_section << self.s.fullname if (self.s && self.s.fullname.size > 0)
       parts = []
-      parts << quarter_section.compact.join(' of ') if quarter_section && quarter_section.size > 0
+      parts << quarter_section.compact.join(' of ') if (quarter_section && quarter_section.size > 0)
       parts << self.t.fullname
       parts << self.r.fullname
       parts << self.m.fullname

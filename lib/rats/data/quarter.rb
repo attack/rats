@@ -11,6 +11,7 @@ module Rats
     end
     
     def fullname
+      return "" unless self.value
       template = "the %s Quarter"
       case self.value.to_s.downcase.to_sym
       when :ne
@@ -29,6 +30,7 @@ module Rats
     private
     
     def validate!
+      return unless self.value
       VALID_QUARTERS.include?(self.value.to_s.downcase.to_sym)
     end
     

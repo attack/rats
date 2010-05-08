@@ -53,6 +53,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     it "understands NE-1-2-3-W4" do
@@ -62,6 +63,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     it "understands NE-1-2-3-4" do
@@ -71,6 +73,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     it "understands NE 1-1-1-4" do
@@ -80,6 +83,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     it "understands NE 1 2 3 4" do
@@ -89,6 +93,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     it "understands 40300201NE" do
@@ -98,6 +103,17 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
+    end
+    
+    it "understands 40300201" do
+      land = Rats.new("40300201")
+      land.quarter.should be_nil
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == 4
+      land.scope.should == :section
     end
     
     it "understands 1-2-3 W4" do
@@ -107,6 +123,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :section
     end
     
     it "understands 2-3 W4" do
@@ -116,6 +133,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :township
     end
     
     it "understands 3 W4" do
@@ -125,6 +143,7 @@ describe "Rats" do
       land.township.should be_nil
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :unknown
     end
     
     it "understands W4" do
@@ -134,6 +153,7 @@ describe "Rats" do
       land.township.should be_nil
       land.range.should be_nil
       land.meridian.should == 4
+      land.scope.should == :unknown
     end
     
     it "understands individual values" do
@@ -143,6 +163,7 @@ describe "Rats" do
       land.township.should == 2
       land.range.should == 3
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     it "understands SE 1-119-24 W4" do
@@ -152,6 +173,7 @@ describe "Rats" do
       land.township.should == 119
       land.range.should == 24
       land.meridian.should == 4
+      land.scope.should == :quarter
     end
     
     describe "alternate method" do
@@ -309,11 +331,13 @@ describe "Rats" do
       
       it "returns the long version with Section" do
         land = Rats.new("1-2-3 W4")
+        #puts land.inspect
         land.location(:long).should == "Section 1, Township 2, Range 3, West of the Fourth Meridian"
       end
       
       it "returns the long version with Township" do
         land = Rats.new("2-3 W4")
+        #puts land.inspect
         land.location(:long).should == "Township 2, Range 3, West of the Fourth Meridian"
       end
       
@@ -356,6 +380,7 @@ describe "Rats" do
       
       it "knows when it isn't valid"do
         land = Rats.new("3 W4")
+        #puts land.inspect
         land.valid?.should be_false
       end
       
