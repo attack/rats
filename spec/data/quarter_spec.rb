@@ -12,6 +12,18 @@ describe Rats::Quarter do
     data.fullname.should == "the Northeast Quarter"
   end
   
+  it "detects half" do
+    Rats::Quarter.half?('NE').should be_false
+    Rats::Quarter.half?('N').should be_true
+    Rats::Quarter.half?('North').should be_true
+  end
+  
+  it "transform input" do
+    Rats::Quarter.transform('ne').should == 'NE'
+    Rats::Quarter.transform('north').should == 'N'
+    Rats::Quarter.transform('n').should == 'N'
+  end
+  
   describe "boundaries" do
     
     it "knows valid data" do

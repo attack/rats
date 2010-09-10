@@ -59,6 +59,14 @@ There can be up to a maximum of 36 Sections in a township.  The number starts wi
 North of number 6 and counts up West-to-East until the number 12.  It snakes back
 and forth until it finishes at number 36 in the North-East corner.
 
+=== Half
+a.k.a. Half Section
+
+from above example: [= N or = North]
+
+The Half Section represents a 1/2 x 1 mile area within the 1x1 mile Section.
+They are identified by "N", "E", "S" and "W".
+
 === Quarter
 a.k.a. Quarter Section
 
@@ -91,6 +99,16 @@ fields from multiple string representations of the location.
 For example, NE 1-2-3 W4 and 40300201NE are both recognized and parsed, representing
 the same location.
 
+=== Expansion/Division
+
+Townships, Sections and Half Sections can be divided into multiple Quarter Sections.
+1 Half Section = 2 Quarter Sections
+1 Section = 4 Quarter Sections
+1 Township = 144 Quarter Sections
+
+For example, the Half Section N 1-2-3 W4 has the Quarter Sections NE 1-2-3 W4 and
+NW 1-2-3 W4. 
+
 === Display
 
 Included is string creation that can create common representations of the
@@ -113,6 +131,13 @@ Read the attributes
   quarter_section.township
   quarter_section.range
   quarter_section.meridian
+  
+Divide into multiple Quarter Sections
+
+  half_section = Rats.new("N 1-2-3 W4")
+  half_section.is_divisible?
+  quarter_sections = half_section.divide
+  # quarter_sections == [Rats.new("NE 1-2-3 W4"), Rats.new("NW 1-2-3 W4")]
 
 = Information
 
@@ -143,7 +168,7 @@ cases this assumption breaks down.
 == Environment
 
 This gem was created using:
-- ruby 1.9.1-p378, 1.9.2-head
+- ruby 1.9.1-p378, 1.9.2-p0
 - rspec 1.3.0
 - rake 0.8.7
 

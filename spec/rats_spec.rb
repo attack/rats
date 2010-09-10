@@ -96,6 +96,26 @@ describe "Rats" do
       land.scope.should == :quarter
     end
     
+    it "understands N 1-2-3 W4" do
+      land = Rats.new("N 1-2-3 W4")
+      land.quarter.should == "N"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == 4
+      land.scope.should == :half
+    end
+    
+    it "understands North 1-2-3 W4" do
+      land = Rats.new("North 1-2-3 W4")
+      land.quarter.should == "N"
+      land.section.should == 1
+      land.township.should == 2
+      land.range.should == 3
+      land.meridian.should == 4
+      land.scope.should == :half
+    end
+    
     it "understands 40300201NE" do
       land = Rats.new("40300201NE")
       land.quarter.should == "NE"
@@ -329,6 +349,11 @@ describe "Rats" do
         land.location(:long).should == "the Northeast Quarter of Section 1, Township 2, Range 3, West of the Fourth Meridian"
       end
       
+      it "returns the long version with Half" do
+        land = Rats.new("N 1-2-3 W4")
+        land.location(:long).should == "the North Half of Section 1, Township 2, Range 3, West of the Fourth Meridian"
+      end
+      
       it "returns the long version with Section" do
         land = Rats.new("1-2-3 W4")
         #puts land.inspect
@@ -350,6 +375,16 @@ describe "Rats" do
     it "knows quarter" do
       land = Rats.new("NE 1-2-3 W4")
       land.scope.should == :quarter
+    end
+    
+    it "knows half" do
+      land = Rats.new("E 1-2-3 W4")
+      land.scope.should == :half
+    end
+    
+    it "knows half" do
+      land = Rats.new("East 1-2-3 W4")
+      land.scope.should == :half
     end
     
     it "knows section" do
@@ -397,6 +432,43 @@ describe "Rats" do
       
       land = Rats.new("1-2-3 W4")
       land.to_a.should == [1, 2, 3, 4]
+    end
+    
+    describe "expansion" do
+      
+      it "is divisible" do
+        Rats.new("N 1-2-3 W4").is_divisible?.should be_true
+        Rats.new("1-2-3 W4").is_divisible?.should be_true
+        Rats.new("2-3 W4").is_divisible?.should be_true
+      end
+      
+      it "is not divisible" do
+        Rats.new("NE 1-2-3 W4").is_divisible?.should be_false
+        Rats.new("3 W4").is_divisible?.should be_false
+        Rats.new("W4").is_divisible?.should be_false
+      end
+      
+      describe "half -> 2 quarters" do
+        quarters = Rats.new("N 1-2-3 W4").divide
+        quarters.size.should == 2
+        quarters.first.quarter.should == 'NE'
+        quarters.last.quarter.should == 'NW'
+      end
+      
+      describe "section -> 4 quarters" do
+        quarters = Rats.new("1-2-3 W4").divide
+        quarters.size.should == 4
+        quarters[0].quarter.should == 'NE'
+        quarters[1].quarter.should == 'NW'
+        quarters[2].quarter.should == 'SE'
+        quarters[3].quarter.should == 'SW'
+      end
+      
+      describe "township -> 144 quarters" do
+        quarters = Rats.new("2-3 W4").divide
+        quarters.size.should == 144
+      end
+      
     end
                     
   end

@@ -70,7 +70,11 @@ module Rats
       if self.meridian && self.range && self.township
         if self.section
           if self.quarter
-            :quarter
+            if Rats::Quarter.half?(self.quarter)
+              :half
+            else
+              :quarter
+            end
           else
             :section
           end
@@ -143,7 +147,62 @@ module Rats
     def to_a
       [self.quarter, self.section, self.township, self.range, self.meridian].compact
     end
-       
+    
+    # can this location be broken down into quarter sections?
+    #
+    def is_divisible?
+      [:half, :section, :township].include?(self.scope)
+    end
+    
+    # returns individual quarter sections for a :half_section, :section or :township
+    #
+    def divide
+      return unless self.is_divisible?
+      case self.scope
+      when :half
+        self.divide_half
+      when :section
+        self.divide_section
+      when :township
+        self.divide_township
+      end
+    end
+    
+    def divide_half
+      quarters = []
+      case self.quarter.to_s.downcase
+      when 'n'
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NE')
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NW')
+      when 's'
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SE')
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SW')
+      when 'e'
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NE')
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SE')
+      when 'w'
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NW')
+        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SW')
+      end
+      quarters
+    end
+    
+    def divide_section(section=nil)
+      quarters = []
+      ['NE', 'NW', 'SE', 'SW'].each do |quarter|
+        quarters << Rats.new(self.meridian, self.range, self.township, section || self.section, quarter)
+      end
+      quarters
+    end
+    
+    def divide_township
+      quarters = []
+      (1..36).each do |section|
+        quarters += divide_section(section)
+      end
+      quarters
+    end
+
     private
 
     def parse_string(location)
@@ -162,8 +221,11 @@ module Rats
     end
 
     def parse_description(description)
-      quarter = description.to_s.scan(/^\D{2}/)
-      self.quarter = quarter[0].upcase if quarter && quarter.size > 0
+      # just skip the case of only a meridian ie: 'W4'
+      unless description.to_s.match(/^w\d{1,3}$/i)
+        quarter = description.to_s.scan(/^north|^south|^east|^west|^ne|^nw|^se|^sw|^n|^e|^s|^w/i)
+        self.quarter = Rats::Quarter.transform(quarter[0]) if quarter && quarter.size > 0
+      end
 
       numbers = description.to_s.scan(/\d{1,3}/)
       if numbers
@@ -176,14 +238,14 @@ module Rats
     end
 
     def parse_parcel_id(parcel_id)
-      result = parcel_id.to_s.scan(/^(\d{1})(\d{2})(\d{3})(\d{2})(\D{2})?/)      
+      result = parcel_id.to_s.scan(/^(\d{1})(\d{2})(\d{3})(\d{2})(\D{1,2})?/)      
       return unless result && result.size > 0
       numbers = result.pop.compact      
       self.meridian = numbers.shift.to_i if numbers.size > 0
       self.range = numbers.shift.to_i if numbers.size > 0
       self.township = numbers.shift.to_i if numbers.size > 0
       self.section = numbers.shift.to_i if numbers.size > 0
-      self.quarter = numbers.shift.to_s if numbers.size > 0
+      self.quarter = numbers.shift.to_s.strip if numbers.size > 0
       true
     end
 
