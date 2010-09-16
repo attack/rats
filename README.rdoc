@@ -123,6 +123,9 @@ Parse a location
 Print the location
 
   quarter_section.location
+  quarter_section.location(:padded)
+  quarter_section.location(:short)
+  quarter_section.location(:long)
 
 Read the attributes
 

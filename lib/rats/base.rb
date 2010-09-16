@@ -46,6 +46,8 @@ module Rats
       case format
       when :short
         short_location
+      when :padded
+        padded_location
       when :long
         long_location
       else
@@ -270,6 +272,14 @@ module Rats
       [@meridian.to_p,@range.to_p,@township.to_p,@section.to_p,@quarter.to_p].compact.join('').strip
     end
     
+    def padded_location
+      if self.quarter
+        "#{@quarter.to_p} #{[@section.to_p,@township.to_p,@range.to_p].compact.join('-')} #{@meridian.to_s}".strip
+      else
+        "#{[@section.to_p,@township.to_p,@range.to_p].compact.join('-')} #{@meridian.to_s}".strip
+      end
+    end
+
     def long_location
       quarter_section = []
       quarter_section << self.q.fullname if (self.q && self.q.fullname.size > 0)

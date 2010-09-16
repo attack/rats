@@ -342,6 +342,25 @@ describe "Rats" do
 
     end
     
+    describe ":padded" do
+    
+      it "returns NE 01-002-03 W4" do
+        land = Rats.new("NE 1-2-3 W4")
+        land.location(:padded).should == "NE 01-002-03 W4"
+      end
+    
+      it "returns 01-002-03 W4" do
+        land = Rats.new("1-2-3 W4")
+        land.location(:padded).should == "01-002-03 W4"
+      end
+    
+      it "returns 002-03 W4" do
+        land = Rats.new("2-3 W4")
+        land.location(:padded).should == "002-03 W4"
+      end
+      
+    end
+    
     describe ":long" do
           
       it "returns the long version with Quarter" do
