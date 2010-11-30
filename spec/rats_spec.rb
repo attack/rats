@@ -457,6 +457,8 @@ describe "Rats" do
       
       it "is divisible" do
         Rats.new("N 1-2-3 W4").is_divisible?.should be_true
+        Rats.new("NSE 1-2-3 W4").is_divisible?.should be_true
+        Rats.new("ALL 1-2-3 W4").is_divisible?.should be_true
         Rats.new("1-2-3 W4").is_divisible?.should be_true
         Rats.new("2-3 W4").is_divisible?.should be_true
       end
@@ -474,8 +476,25 @@ describe "Rats" do
         quarters.last.quarter.should == 'NW'
       end
       
+      describe "3/4 -> 3 quarters" do
+        quarters = Rats.new("NSE 1-2-3 W4").divide
+        quarters.size.should == 3
+        quarters[0].quarter.should == 'NE'
+        quarters[1].quarter.should == 'NW'
+        quarters[2].quarter.should == 'SE'
+      end
+      
       describe "section -> 4 quarters" do
         quarters = Rats.new("1-2-3 W4").divide
+        quarters.size.should == 4
+        quarters[0].quarter.should == 'NE'
+        quarters[1].quarter.should == 'NW'
+        quarters[2].quarter.should == 'SE'
+        quarters[3].quarter.should == 'SW'
+      end
+      
+      describe "ALL -> 4 quarters" do
+        quarters = Rats.new("ALL 1-2-3 W4").divide
         quarters.size.should == 4
         quarters[0].quarter.should == 'NE'
         quarters[1].quarter.should == 'NW'

@@ -172,20 +172,40 @@ module Rats
     
     def divide_half
       quarters = []
-      case self.quarter.to_s.downcase
+      locations = case self.quarter.to_s.downcase
       when 'n'
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NE')
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NW')
+        ['NE','NW']
       when 's'
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SE')
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SW')
+        ['SE','SW']
       when 'e'
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NE')
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SE')
+        ['NE','SE']
       when 'w'
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'NW')
-        quarters << Rats.new(self.meridian, self.range, self.township, self.section, 'SW')
+        ['NW','SW']
+      when 'all'
+        ['NE','NW','SE','SW']
+      when 'nse'
+        ['NE','NW','SE']
+      when 'nsw'
+        ['NE','NW','SW']
+      when 'enw'
+        ['NE','NW','SE']
+      when 'esw'
+        ['NE','SE','SW']
+      when 'sne'
+        ['NE','SE','SW']
+      when 'snw'
+        ['NW','SE','SW']
+      when 'wse'
+        ['NW','SE','SW']
+      when 'wne'
+        ['NE','NW','SW']
       end
+      
+      # create the required locations
+      locations.each do |quarter|
+        quarters << Rats.new(self.meridian, self.range, self.township, section || self.section, quarter)
+      end
+      
       quarters
     end
     
@@ -225,7 +245,7 @@ module Rats
     def parse_description(description)
       # just skip the case of only a meridian ie: 'W4'
       unless description.to_s.match(/^w\d{1,3}$/i)
-        quarter = description.to_s.scan(/^north|^south|^east|^west|^ne|^nw|^se|^sw|^n|^e|^s|^w/i)
+        quarter = description.to_s.scan(/^north|^south|^east|^west|^all|^nse|^nsw|^enw|^esw|^sne|^snw|^wse|^wne|^ne|^nw|^se|^sw|^n|^e|^s|^w/i)
         self.quarter = Rats::Quarter.transform(quarter[0]) if quarter && quarter.size > 0
       end
 

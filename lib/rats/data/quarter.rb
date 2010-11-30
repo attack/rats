@@ -1,7 +1,7 @@
 module Rats
   class Quarter < Data
     
-    VALID_QUARTERS = [:ne, :nw, :se, :sw, :n, :e, :s, :w]
+    VALID_QUARTERS = [:all, :nse, :nsw, :enw, :esw, :sne, :snw, :wse, :wne, :ne, :nw, :se, :sw, :n, :e, :s, :w]
     
     def self.padding_width; 2; end
     def self.padding_value; " "; end
@@ -30,13 +30,31 @@ module Rats
         sprintf(template, 'South', 'Half')
       when :w
         sprintf(template, 'West', 'Half')
+      when :all
+        sprintf(template, 'Entire', 'Section')
+      when :nse
+        sprintf(template, 'North Half and', 'Southeast Quarter')
+      when :nsw
+        sprintf(template, 'North Half and', 'Southwest Quarter')
+      when :enw
+        sprintf(template, 'East Half and', 'Northwest Quarter')
+      when :esw
+        sprintf(template, 'East Half and', 'Southwest Quarter')
+      when :sne
+        sprintf(template, 'South Half and', 'Northeast Quarter')
+      when :snw
+        sprintf(template, 'South Half and', 'Northwest Quarter')
+      when :wse
+        sprintf(template, 'West Half and', 'Southeast Quarter')
+      when :wne
+        sprintf(template, 'West Half and', 'Northeast Quarter')
       else
         ''
       end
     end
     
     def self.half?(value)
-      %w(north n south s east e west w).include?(value.to_s.downcase)
+      %w(all nse nsw enw esw sne snw wse wne north n south s east e west w).include?(value.to_s.downcase)
     end
     
     def self.transform(value)
