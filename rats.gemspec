@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rats}
-  s.version = "0.3.2"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mark G"]
-  s.date = %q{2010-09-16}
+  s.date = %q{2010-11-30}
   s.description = %q{A ruby class to help with using the Alberta Township System}
   s.email = %q{rats@attackcorp.com}
   s.extra_rdoc_files = [
@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/attack/rats}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{A ruby class to help with using the Alberta Township System}
   s.test_files = [
     "spec/data/data_spec.rb",
@@ -64,7 +64,7 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
     else
     end
   else
