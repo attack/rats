@@ -71,7 +71,8 @@ from above example: [= NSE]
 
 The Multi Quarter Section represents a 1/2 x 1 mile + 1/2 x 1/2 mile area within the
 1x1 mile Section (or basically 3 of the 4 quarters).
-They are identified by "NSE", "NSW", "ENW", "ESW", "SNE", "SNW", "WNE" and "WSE".
+They are identified by "NSE", "NSW", "ENW", "ESW", "SNE", "SNW", "WNE" and "WSE",
+"NWS", "NES", "SEN", "SWN", "NWE", "NEW", "SEW", "SWE".
 
 === Quarter
 a.k.a. Quarter Section

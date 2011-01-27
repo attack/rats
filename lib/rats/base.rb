@@ -199,6 +199,22 @@ module Rats
         ['NW','SE','SW']
       when 'wne'
         ['NE','NW','SW']
+      when 'nws'
+        ['NW','SE','SW']
+      when 'nes'
+        ['NE','SE','SW']
+      when 'sen'
+        ['NE','NW','SE']
+      when 'swn'
+        ['NE','NW','SW']
+      when 'nwe'
+        ['NE','NW','SE']
+      when 'new'
+        ['NE','NW','SW']
+      when 'sew'
+        ['NW','SE','SW']
+      when 'swe'
+        ['NE','SE','SW']
       end
       
       # create the required locations
