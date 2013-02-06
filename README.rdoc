@@ -200,4 +200,4 @@ This gem was created using:
 
 == Copyright
 
-Copyright (c) 2010 Mark sG. See LICENSE for details.
+Copyright (c) 2013 Mark G. See LICENSE for details.
