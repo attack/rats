@@ -1,13 +1,13 @@
 module Rats
   class Base
-    
+
     # TODO: this data needs to be updated to list the sections where not
     #       all quarters are valid, and list whoch ones are.
-    
+
     # this array doesn't define what is valid, but trys to define what
     # combinations of meridian/range/township/section exist
     #
-    
+
     # format
     # VALID_MERIDIAN => {
     #   # NOTE: any RANGE not listed here, does not exist
@@ -25,7 +25,7 @@ module Rats
     #     VALID_SECTION => ARRAY_OF_VALID_QUARTERS
     #   }
     # }
-    
+
     # proposed format (allows for quarters to be listed)
     #
     # TOWNSHIPS_BY_RANGE_AND_MERIDIAN = {
@@ -60,7 +60,7 @@ module Rats
     #     }
     #   }
     # }
-    
+
     TOWNSHIPS_BY_RANGE_AND_MERIDIAN = {
       4 => {
         1 => { :townships => 1..126 },
@@ -631,6 +631,6 @@ module Rats
         },
       }
     }
-    
+
   end
 end

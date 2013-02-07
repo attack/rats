@@ -1,8 +1,7 @@
 module Rats
   class Base
-    
     attr_accessor :errors
-    
+
     def initialize(*args)
       return unless args.flatten!
       @quarter = Rats::Quarter.new
@@ -17,13 +16,13 @@ module Rats
         set_values(args)
       end
     end
-    
+
     def q; @quarter; end
     def s; @section; end
     def t; @township; end
     def r; @range; end
     def m; @meridian; end
-    
+
     def q=(v); @quarter = v; end
     def s=(v); @section = v; end
     def t=(v); @township = v; end
@@ -59,11 +58,11 @@ module Rats
       return unless value
       if value.is_a?(Array)
         set_values(value)
-      else  
+      else
         parse_string(value)
       end
     end
-    
+
     def to_s
       default_location
     end
@@ -88,20 +87,20 @@ module Rats
       end
     end
 
-    def valid?      
+    def valid?
       # check each data field individually
       [:meridian, :range, :township, :section, :quarter].each do |data|
         valid = self.send(data.to_s.chars.first).valid?
         add_error(data, self.send(data.to_s.chars.first).error) unless valid
       end
-      
+
       # check each field as it relates to others
       self.exists? unless self.errors.size > 0
-      
+
       # are we valid?
       self.errors.size == 0
     end
-    
+
     # test that a location actually exists
     #
     def exists?
@@ -110,26 +109,26 @@ module Rats
         add_error(:land, 'does not exist')
         return false
       end
-      
+
       # make sure range exists
       unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range]
         add_error(:land, 'does not exist')
         return false
       end
-      
+
       # make sure township exists
       unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:townships].include?(self.township)
         add_error(:land, 'does not exist')
         return false
       end
-      
+
       # make sure section exists
-      
+
       # it is possible all sections exists for all townships
       if TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range].has_key?(:sections)
         # NO, now see if this township has valid sections
         if TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections].has_key?(self.township)
-          # YES, check further to see that this section is listed          
+          # YES, check further to see that this section is listed
           unless TOWNSHIPS_BY_RANGE_AND_MERIDIAN[self.meridian][self.range][:sections][self.township].include?(self.section)
             add_error(:land, 'does not exist')
             return false
@@ -145,17 +144,17 @@ module Rats
         return true
       end
     end
-    
+
     def to_a
       [self.quarter, self.section, self.township, self.range, self.meridian].compact
     end
-    
+
     # can this location be broken down into quarter sections?
     #
     def is_divisible?
       [:half, :section, :township].include?(self.scope)
     end
-    
+
     # returns individual quarter sections for a :half_section, :section or :township
     #
     def divide
@@ -169,7 +168,7 @@ module Rats
         self.divide_township
       end
     end
-    
+
     def divide_half
       quarters = []
       locations = case self.quarter.to_s.downcase
@@ -216,15 +215,15 @@ module Rats
       when 'swe'
         ['NE','SE','SW']
       end
-      
+
       # create the required locations
       locations.each do |quarter|
         quarters << Rats.new(self.meridian, self.range, self.township, section || self.section, quarter)
       end
-      
+
       quarters
     end
-    
+
     def divide_section(section=nil)
       quarters = []
       ['NE', 'NW', 'SE', 'SW'].each do |quarter|
@@ -232,7 +231,7 @@ module Rats
       end
       quarters
     end
-    
+
     def divide_township
       quarters = []
       (1..36).each do |section|
@@ -276,9 +275,9 @@ module Rats
     end
 
     def parse_parcel_id(parcel_id)
-      result = parcel_id.to_s.scan(/^(\d{1})(\d{2})(\d{3})(\d{2})(\D{1,2})?/)      
+      result = parcel_id.to_s.scan(/^(\d{1})(\d{2})(\d{3})(\d{2})(\D{1,2})?/)
       return unless result && result.size > 0
-      numbers = result.pop.compact      
+      numbers = result.pop.compact
       self.meridian = numbers.shift.to_i if numbers.size > 0
       self.range = numbers.shift.to_i if numbers.size > 0
       self.township = numbers.shift.to_i if numbers.size > 0
@@ -294,7 +293,7 @@ module Rats
       self.section = values.shift.to_i if values.size > 0
       self.quarter = values.shift.to_s if values.size > 0
     end
-    
+
 
     def default_location
       if self.quarter
@@ -307,7 +306,7 @@ module Rats
     def short_location
       [@meridian.to_p,@range.to_p,@township.to_p,@section.to_p,@quarter.to_p].compact.join('').strip
     end
-    
+
     def padded_location
       if self.quarter
         "#{@quarter.to_p} #{[@section.to_p,@township.to_p,@range.to_p].compact.join('-')} #{@meridian.to_s}".strip
@@ -327,11 +326,11 @@ module Rats
       parts << self.m.fullname
       parts.compact.join(', ')
     end
-    
+
     def add_error(index, the_error)
       @errors[index] = [] unless @errors.has_key?(index)
-      @errors[index] << the_error 
+      @errors[index] << the_error
     end
-    
+
   end
 end

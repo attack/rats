@@ -5,17 +5,13 @@ require 'rats/data'
 require 'rats/boundaries'
 
 module Rats
-  
   def self.new(*args)
     Rats::Base.new(args)
   end
-  
-  # custom errors
-  #
+
   class OutOfBounds < StandardError; end
   #class OutOfSection < OutOfBounds; end
   #class OutOfTownship < OutOfBounds; end
   #class OutOfMeridian < OutOfBounds; end
   #class OutOfAlberta < OutOfBounds; end
-    
 end

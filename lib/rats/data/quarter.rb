@@ -1,6 +1,6 @@
 module Rats
   class Quarter < Data
-    
+
     VALID_QUARTERS = [
       :all,
       :nse, :nsw, :enw, :esw, :sne, :snw, :wse, :wne,
@@ -8,14 +8,14 @@ module Rats
       :ne, :nw, :se, :sw,
       :n, :e, :s, :w
     ]
-    
+
     def self.padding_width; 2; end
     def self.padding_value; " "; end
-    
+
     def self.transform(value)
       value.to_s.upcase if value
     end
-    
+
     def fullname
       return "" unless self.value
       template = "the %s %s"
@@ -74,11 +74,11 @@ module Rats
         ''
       end
     end
-    
+
     def self.half?(value)
       %w(all nse nsw enw esw sne snw wse wne nws nes sen swn nwe new sew swe north n south s east e west w).include?(value.to_s.downcase)
     end
-    
+
     def self.transform(value)
       v = value.to_s.upcase.strip
       case v
@@ -93,13 +93,13 @@ module Rats
       end
       v
     end
-    
+
     private
-    
+
     def validate!
       return unless self.value
       VALID_QUARTERS.include?(self.value.to_s.downcase.to_sym)
     end
-    
+
   end
 end
