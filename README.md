@@ -1,4 +1,5 @@
-= rats
+# rats
+[![Build Status](https://travis-ci.org/attack/rats.png)](https://travis-ci.org/attack/rats)
 
 a.k.a. Ruby Alberta Township System
 
@@ -7,7 +8,7 @@ you to create and represent townships, sections and quarter sections.
 
 You may find it amusing that Alberta is Rat-free ... until now.
 
-== ATS
+## ATS
 
 Alberta Township system is a land survey grid used in Alberta, Canada that
 divides the whole province into addressable locations.
@@ -16,7 +17,7 @@ A typical location looks like: NE 1-2-3 W4
 
 Which can be broken down as follows ...
 
-=== Meridian
+### Meridian
 
 from above example: [= W4] or West of the 4th Meridian
 
@@ -25,7 +26,7 @@ and increments approx. every 4th line of longitude, from East to West.
 
 Alberta contains 3 of these Meridians, W4 through W6.
 
-=== Range
+### Range
 a.k.a Range Lines
 
 from above example: [= 3]
@@ -36,7 +37,7 @@ resets at the next Meridian.  Each increase is approx. every 6 miles.
 NOTE: The longitude lines are closer together the further North you get, so as
 you go North, there is less Ranges from East to West.
 
-=== Township
+### Township
 a.k.a. Township Lines
 
 from above example: [= 2]
@@ -49,7 +50,7 @@ NOTE: The 6x6 mile "square" indicated by the Township (line) + Range (line) +
 Meridian is confusingly called a Township.  So you have the Township line and
 the 6x6 mile Township "square".
 
-=== Section
+### Section
 
 from above example: [= 1]
 
@@ -59,7 +60,7 @@ There can be up to a maximum of 36 Sections in a township.  The number starts wi
 North of number 6 and counts up West-to-East until the number 12.  It snakes back
 and forth until it finishes at number 36 in the North-East corner.
 
-=== Multi
+### Multi
 a.k.a. Multi Quarters
 
 from above example: [= N or = North]
@@ -74,7 +75,7 @@ The Multi Quarter Section represents a 1/2 x 1 mile + 1/2 x 1/2 mile area within
 They are identified by "NSE", "NSW", "ENW", "ESW", "SNE", "SNW", "WNE" and "WSE",
 "NWS", "NES", "SEN", "SWN", "NWE", "NEW", "SEW", "SWE".
 
-=== Quarter
+### Quarter
 a.k.a. Quarter Section
 
 from above example: [= NE]
@@ -83,12 +84,12 @@ The Quarter represents a 1/2 x 1/2 mile square within the 1x1 mile Section.
 There can be 4 Quarters in a Section.  They are identified by "NE", "NW", "SE"
 and "SW".
 
-== Purpose
+## Purpose
 
 The purpose of Rats is to make it easier to deal with location described using
 the Alberta Township System, at the Quarter, Section or Township level.
 
-=== Validation
+### Validation
 
 Included is validations, only allowing you to describe locations that actually
 exist.
@@ -98,7 +99,7 @@ For example, Range-line 30 is valid for Township-lines 1-18, but not 18-126.
 NOTE: At the moment, invalid quarters within valid sections are not currently
 identified.
 
-=== Parsing
+### Parsing
 
 Included is string parsing, allowing you to extract and separate the different
 fields from multiple string representations of the location.
@@ -106,7 +107,7 @@ fields from multiple string representations of the location.
 For example, NE 1-2-3 W4 and 40300201NE are both recognized and parsed, representing
 the same location.
 
-=== Expansion/Division
+### Expansion/Division
 
 Townships, Sections and Half Sections can be divided into multiple Quarter Sections.
 1 Half Section = 2 Quarter Sections
@@ -117,34 +118,41 @@ Townships, Sections and Half Sections can be divided into multiple Quarter Secti
 For example, the Half Section N 1-2-3 W4 has the Quarter Sections NE 1-2-3 W4 and
 NW 1-2-3 W4.
 
-=== Display
+### Display
 
 Included is string creation that can create common representations of the
 location.
 
-= Usage
+# Usage
 
 Parse a location
 
+```ruby
   quarter_section = Rats.new("NE 1-2-3 W4")
+```
 
 Print the location
 
+```ruby
   quarter_section.location
   quarter_section.location(:padded)
   quarter_section.location(:short)
   quarter_section.location(:long)
+```
 
 Read the attributes
 
+```ruby
   quarter_section.quarter
   quarter_section.section
   quarter_section.township
   quarter_section.range
   quarter_section.meridian
-  
+```
+
 Divide into multiple Quarter Sections
 
+```ruby
   half_section = Rats.new("N 1-2-3 W4")
   half_section.is_divisible?
   quarter_sections = half_section.divide
@@ -154,20 +162,21 @@ Divide into multiple Quarter Sections
   multi_section.is_divisible?
   quarter_sections = multi_section.divide
   # quarter_sections == [Rats.new("NE 1-2-3 W4"), Rats.new("NW 1-2-3 W4"), Rats.new("SE 1-2-3 W4")]
+```
 
-= Information
+# Information
 
-== links
+## links
 
 http://en.wikipedia.org/wiki/Alberta_Township_System
 
-== Road Map
+## Road Map
 
 Future:
-- either correct the assumption that all quarters are valid in a valid
+* either correct the assumption that all quarters are valid in a valid
   section, or remove validation completely (re: all or none)
-- add support for Saskatchewan (no timeline, need to find data)
-- address bugs, if any
+* add support for Saskatchewan (no timeline, need to find data)
+* address bugs, if any
 
 Except for the above, once this gem is finalized, I do not see future
 development happening unless I want to add ATS to other-system conversions
@@ -175,20 +184,20 @@ development happening unless I want to add ATS to other-system conversions
 
 Currently this point has not been reached and this gem is still in development.
 
-== Assumptions
+## Assumptions
 
 As currently written, I assume that within every valid section, all four quarters
 are valid. I know this to be incorrect, but I can not correct this until I know which
 cases this assumption breaks down.
 
-== Environment
+## Environment
 
 This gem was created using:
-- ruby 1.9.1-p378, 1.9.2-p0
-- rspec 1.3.0
-- rake 0.8.7
+* ruby 1.9.3p374
+* rspec 2.12.2
+* rake 10.0.3
 
-== Note on Patches/Pull Requests
+## Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -198,6 +207,6 @@ This gem was created using:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2013 Mark G. See LICENSE for details.
