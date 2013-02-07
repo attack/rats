@@ -1,12 +1,9 @@
-require 'rubygems'
-require 'spec'
+require 'rspec'
 
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'rats'
 include Rats
 
-Spec::Runner.configure do |config|
-  
+RSpec.configure do |config|
   config.mock_with :mocha
-  
 end
