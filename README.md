@@ -6,7 +6,9 @@ a.k.a. Ruby Alberta Township System
 A ruby class to help with using the Alberta Township System.  This class will allow
 you to create and represent townships, sections and quarter sections.
 
-You may find it amusing that Alberta is Rat-free ... until now.
+#### Status
+
+This gem is not under active development, but is still maintained.
 
 ## ATS
 
@@ -128,40 +130,40 @@ location.
 Parse a location
 
 ```ruby
-  quarter_section = Rats.new("NE 1-2-3 W4")
+quarter_section = Rats.new("NE 1-2-3 W4")
 ```
 
 Print the location
 
 ```ruby
-  quarter_section.location
-  quarter_section.location(:padded)
-  quarter_section.location(:short)
-  quarter_section.location(:long)
+quarter_section.location
+quarter_section.location(:padded)
+quarter_section.location(:short)
+quarter_section.location(:long)
 ```
 
 Read the attributes
 
 ```ruby
-  quarter_section.quarter
-  quarter_section.section
-  quarter_section.township
-  quarter_section.range
-  quarter_section.meridian
+quarter_section.quarter
+quarter_section.section
+quarter_section.township
+quarter_section.range
+quarter_section.meridian
 ```
 
 Divide into multiple Quarter Sections
 
 ```ruby
-  half_section = Rats.new("N 1-2-3 W4")
-  half_section.is_divisible?
-  quarter_sections = half_section.divide
-  # quarter_sections == [Rats.new("NE 1-2-3 W4"), Rats.new("NW 1-2-3 W4")]
+half_section = Rats.new("N 1-2-3 W4")
+half_section.is_divisible?
+quarter_sections = half_section.divide
+# quarter_sections == [Rats.new("NE 1-2-3 W4"), Rats.new("NW 1-2-3 W4")]
 
-  multi_section = Rats.new("NSE 1-2-3 W4")
-  multi_section.is_divisible?
-  quarter_sections = multi_section.divide
-  # quarter_sections == [Rats.new("NE 1-2-3 W4"), Rats.new("NW 1-2-3 W4"), Rats.new("SE 1-2-3 W4")]
+multi_section = Rats.new("NSE 1-2-3 W4")
+multi_section.is_divisible?
+quarter_sections = multi_section.divide
+# quarter_sections == [Rats.new("NE 1-2-3 W4"), Rats.new("NW 1-2-3 W4"), Rats.new("SE 1-2-3 W4")]
 ```
 
 # Information
@@ -176,13 +178,6 @@ Future:
 * either correct the assumption that all quarters are valid in a valid
   section, or remove validation completely (re: all or none)
 * add support for Saskatchewan (no timeline, need to find data)
-* address bugs, if any
-
-Except for the above, once this gem is finalized, I do not see future
-development happening unless I want to add ATS to other-system conversions
-(ie: latitude/longitude).  Nothing else is planned.
-
-Currently this point has not been reached and this gem is still in development.
 
 ## Assumptions
 
@@ -190,23 +185,14 @@ As currently written, I assume that within every valid section, all four quarter
 are valid. I know this to be incorrect, but I can not correct this until I know which
 cases this assumption breaks down.
 
-## Environment
+## Contributing
 
-This gem was created using:
-* ruby 1.9.3p374
-* rspec 2.12.2
-* rake 10.0.3
-
-## Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
 
 ## Copyright
 
-Copyright (c) 2013 Mark G. See LICENSE for details.
+Copyright (c) 2009-2014 Mark Gangl. See LICENSE for details.
