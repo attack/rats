@@ -1,8 +1,6 @@
 require 'rspec'
 
-$:.unshift(File.dirname(__FILE__) + '/../lib')
-require 'rats'
-include Rats
+require_relative '../lib/rats'
 
 RSpec.configure do |config|
   config.mock_with :mocha
