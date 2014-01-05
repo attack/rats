@@ -1,14 +1,12 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require_relative '../spec_helper'
 
 describe Rats::Meridian do
-
   it "initializes" do
     data = Rats::Meridian.new
     data.is_a?(Rats::Meridian).should be_true
   end
 
   describe "boundaries" do
-
     it "knows valid data" do
       data = Rats::Meridian.new(6)
       data.valid?.should be_true
@@ -25,11 +23,9 @@ describe Rats::Meridian do
       data.raise_errors!
       lambda { data.value = 3 }.should raise_error(ArgumentError)
     end
-
   end
 
   describe "read/write" do
-
     it "returns a padded value" do
       data = Rats::Meridian.new('4')
       data.to_p.should == '4'
@@ -56,7 +52,6 @@ describe Rats::Meridian do
     end
 
     describe "transforming" do
-
       it "accepts integers" do
         Rats::Meridian.transform(4).should == 4
       end
@@ -76,9 +71,6 @@ describe Rats::Meridian do
       it "doesn't accept other data" do
         Rats::Meridian.transform('E4').should be_nil
       end
-
     end
-
   end
-
 end

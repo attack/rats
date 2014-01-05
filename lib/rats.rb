@@ -1,5 +1,3 @@
-$:.unshift(File.dirname(__FILE__))
-
 require 'rats/version'
 require 'rats/base'
 require 'rats/data'

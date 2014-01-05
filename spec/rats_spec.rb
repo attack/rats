@@ -1,51 +1,43 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
-describe "Rats" do
-
+describe Rats do
   it "initializes the class" do
     land = Rats.new
     land.is_a?(Rats::Base).should be_true
   end
 
   describe "attributes" do
-
-    before(:each) do
-      @land = Rats.new
-    end
+    let(:land) { Rats.new }
 
     describe "writing and reading" do
-
       it "writes quarter" do
-        @land.quarter = "NE"
-        @land.quarter.should == "NE"
+        land.quarter = "NE"
+        land.quarter.should == "NE"
       end
 
       it "writes section" do
-        @land.section = 1
-        @land.section.should == 1
+        land.section = 1
+        land.section.should == 1
       end
 
       it "writes township" do
-        @land.township = 1
-        @land.township.should == 1
+        land.township = 1
+        land.township.should == 1
       end
 
       it "writes range" do
-        @land.range = 1
-        @land.range.should == 1
+        land.range = 1
+        land.range.should == 1
       end
 
       it "writes meridian" do
-        @land.meridian = 4
-        @land.meridian.should == 4
+        land.meridian = 4
+        land.meridian.should == 4
       end
-
     end
-
   end
 
   describe "parsing locations" do
-
     it "understands NE 1-2-3 W4" do
       land = Rats.new("NE 1-2-3 W4")
       land.quarter.should == "NE"
@@ -217,17 +209,10 @@ describe "Rats" do
         land.range.should == 3
         land.meridian.should == 4
       end
-
     end
-
   end
 
   describe "validation (does it exist)" do
-
-    # each individual field has already been tested to know what is a valid field
-    # here, I am testing the location as a whole, as a location can be valid
-    # in respect to its individual components, but not as a whole
-
     it "knows a valid and existing location" do
       land = Rats.new("SE 1-2-3 W4")
       land.location.should == "SE 1-2-3 W4"
@@ -238,7 +223,6 @@ describe "Rats" do
       land = Rats.new("SE 2-119-24 W4")
       land.exists?.should be_false
 
-      # but it neightbour does
       land = Rats.new("SE 1-119-24 W4")
       land.exists?.should be_true
     end
@@ -252,11 +236,9 @@ describe "Rats" do
       land = Rats.new("SE 1-20-30 W4")
       land.exists?.should be_false
     end
-
   end
 
   describe "boundaries" do
-
     it "knows when a township is North of Alberta" do
       land = Rats.new("SE 1-127-1 W4")
       land.valid?.should be_false
@@ -296,16 +278,10 @@ describe "Rats" do
       land.errors.has_key?(:land).should be_true
       land.errors[:land].first.should == 'does not exist'
     end
-
-    # it "knows when a quarter has been squeezed out" do
-    # end
-
   end
 
   describe "formatting" do
-
     describe ":default" do
-
       it "returns NE 1-2-3 W4" do
         land = Rats.new("NE 1-2-3 W4")
         land.location.should == "NE 1-2-3 W4"
@@ -320,11 +296,9 @@ describe "Rats" do
         land = Rats.new("2-3 W4")
         land.location.should == "2-3 W4"
       end
-
     end
 
     describe ":short" do
-
       it "returns NE01002034" do
         land = Rats.new("NE 1-2-3 W4")
         land.location(:short).should == "40300201NE"
@@ -339,11 +313,9 @@ describe "Rats" do
         land = Rats.new("2-3 W4")
         land.location(:short).should == "403002"
       end
-
     end
 
     describe ":padded" do
-
       it "returns NE 01-002-03 W4" do
         land = Rats.new("NE 1-2-3 W4")
         land.location(:padded).should == "NE 01-002-03 W4"
@@ -358,11 +330,9 @@ describe "Rats" do
         land = Rats.new("2-3 W4")
         land.location(:padded).should == "002-03 W4"
       end
-
     end
 
     describe ":long" do
-
       it "returns the long version with Quarter" do
         land = Rats.new("NE 1-2-3 W4")
         land.location(:long).should == "the Northeast Quarter of Section 1, Township 2, Range 3, West of the Fourth Meridian"
@@ -375,22 +345,17 @@ describe "Rats" do
 
       it "returns the long version with Section" do
         land = Rats.new("1-2-3 W4")
-        #puts land.inspect
         land.location(:long).should == "Section 1, Township 2, Range 3, West of the Fourth Meridian"
       end
 
       it "returns the long version with Township" do
         land = Rats.new("2-3 W4")
-        #puts land.inspect
         land.location(:long).should == "Township 2, Range 3, West of the Fourth Meridian"
       end
-
     end
-
   end
 
   describe "scope" do
-
     it "knows quarter" do
       land = Rats.new("NE 1-2-3 W4")
       land.scope.should == :quarter
@@ -420,13 +385,10 @@ describe "Rats" do
       land = Rats.new("3 W4")
       land.scope.should == :unknown
     end
-
   end
 
   describe "methods" do
-
     describe "validity" do
-
       it "knows when it is valid" do
         land = Rats.new("NE 1-2-3 W4")
         land.valid?.should be_true
@@ -434,10 +396,8 @@ describe "Rats" do
 
       it "knows when it isn't valid"do
         land = Rats.new("3 W4")
-        #puts land.inspect
         land.valid?.should be_false
       end
-
     end
 
     it "responds_to :to_s" do
@@ -454,7 +414,6 @@ describe "Rats" do
     end
 
     describe "expansion" do
-
       it "is divisible" do
         Rats.new("N 1-2-3 W4").is_divisible?.should be_true
         Rats.new("NSE 1-2-3 W4").is_divisible?.should be_true
@@ -506,9 +465,6 @@ describe "Rats" do
         quarters = Rats.new("2-3 W4").divide
         quarters.size.should == 144
       end
-
     end
-
   end
-
 end

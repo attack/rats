@@ -1,14 +1,12 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require_relative '../spec_helper'
 
 describe Rats::Township do
-
   it "initializes" do
     data = Rats::Township.new
     data.is_a?(Rats::Township).should be_true
   end
 
   describe "boundaries" do
-
     it "knows valid data" do
       data = Rats::Township.new(6)
       data.valid?.should be_true
@@ -20,11 +18,9 @@ describe Rats::Township do
       data.valid?.should be_false
       data.error.should == "not allowed"
     end
-
   end
 
   describe "read/write" do
-
     it "returns a padded value" do
       data = Rats::Township.new('4')
       data.to_p.should == '004'
@@ -46,7 +42,6 @@ describe Rats::Township do
     end
 
     describe "transforming" do
-
       it "accepts integers" do
         Rats::Township.transform(4).should == 4
       end
@@ -58,9 +53,6 @@ describe Rats::Township do
       it "doesn't accept other data" do
         Rats::Township.transform('E4').should be_nil
       end
-
     end
-
   end
-
 end

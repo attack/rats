@@ -1,7 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require_relative '../spec_helper'
 
 describe Rats::Quarter do
-
   it "initializes" do
     data = Rats::Quarter.new
     data.is_a?(Rats::Quarter).should be_true
@@ -25,7 +24,6 @@ describe Rats::Quarter do
   end
 
   describe "boundaries" do
-
     it "knows valid data" do
       data = Rats::Quarter.new('NE')
       data.valid?.should be_true
@@ -37,7 +35,5 @@ describe Rats::Quarter do
       data.valid?.should be_false
       data.error.should == "not allowed"
     end
-
   end
-
 end

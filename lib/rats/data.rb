@@ -1,8 +1,6 @@
-$:.unshift(File.dirname(__FILE__))
-
-require 'data/base'
-require 'data/quarter'
-require 'data/section'
-require 'data/township'
-require 'data/range'
-require 'data/meridian'
+require_relative 'data/base'
+require_relative 'data/quarter'
+require_relative 'data/section'
+require_relative 'data/township'
+require_relative 'data/range'
+require_relative 'data/meridian'
